@@ -1,6 +1,7 @@
 package dit.hua.project.controllers;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,18 +22,19 @@ public class StudentController {
 	@Autowired
 	private Student_DAO studentDAO;
 
-	@RequestMapping(value = "/student-login", method = RequestMethod.GET)
-	public String showStudentLogIn() {
-		return "show-student-login";
-	}
+//	@RequestMapping(value = "/login/main-menu-for-all/student-login", method = RequestMethod.GET)
+//	public String showStudentLogIn() {
+//		return "show-student-login";
+//	}
 
-	@RequestMapping(value = "student-login/options/showForm", method = RequestMethod.GET)
+	@RequestMapping(value = "login/main-menu-for-all/student-menu/showForm", method = RequestMethod.GET)
 	protected String fillForm() {
+		
 		return "st-form";
 	}
 
-	@RequestMapping(value = "student-login/options/showForm/StudentForm", method = RequestMethod.GET)
-	protected String showSubmittedForm(HttpServletRequest request, Model model) {
+	@RequestMapping(value = "login/main-menu-for-all/student-menu/showForm/StudentForm", method = RequestMethod.GET)
+	protected String showSubmittedForm(HttpServletRequest request, Model model, HttpSession session) {
 
 		String fname = request.getParameter("fname");
 		String lname = request.getParameter("lname");
@@ -40,25 +42,28 @@ public class StudentController {
 		int phoneNumber = Integer.parseInt(request.getParameter("phonenumber"));
 		String placeOfResidence = request.getParameter("placeofliving");
 		String placeOfStudying = request.getParameter("placeofstudying");
-		String department = request.getParameter("Department");
+		// String department = request.getParameter("Department");
 		String annualIncome = request.getParameter("FinancialIncome");
 		int siblingsStudying = Integer.parseInt(request.getParameter("numofsiblingswhostudy"));
 		String familyStatus = request.getParameter("FamilyStatus");
 		int yearOfAttendance = Integer.parseInt(request.getParameter("yearofattendance"));
 		int unemployedParents = Integer.parseInt(request.getParameter("UnemployedParents"));
 
-		String user = StudentLogInController.currentUser;
+		String user = (String) session.getAttribute("user");
+		System.out.println("INSIDE PLAIN CONTROLLER USERNAME:   " + user);
 
-		// insert to DB
-			// INFORMATICS
+		String department = (String) session.getAttribute("department");
+
+		// INFORMATICS
 		if (department.equals("Informatics")) {
 			if (studentDAO.if_form_NOT_exists_Plir(user)) {
 
 				studentDAO.insert_form_plir(user, fname, lname, email, phoneNumber, placeOfResidence, placeOfStudying,
 						department, yearOfAttendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
 			} else {
+				String error = "You have already submitted your form";
 
-				studentDAO.returnStudentForm_Plir(user, model);
+				studentDAO.returnStudentForm_Plir(user, model, error);
 
 				return "show-submitted-form";
 			}
@@ -70,8 +75,8 @@ public class StudentController {
 				studentDAO.insert_form_geo(user, fname, lname, email, phoneNumber, placeOfResidence, placeOfStudying,
 						department, yearOfAttendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
 			} else {
-
-				studentDAO.returnStudentForm_Geo(user, model);
+				String error = "You have already submitted your form";
+				studentDAO.returnStudentForm_Geo(user, model, error);
 
 				return "show-submitted-form";
 			}
@@ -81,7 +86,9 @@ public class StudentController {
 				studentDAO.insert_form_diat(user, fname, lname, email, phoneNumber, placeOfResidence, placeOfStudying,
 						department, yearOfAttendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
 			} else {
-				studentDAO.returnStudentForm_Diat(user, model);
+				String error = "You have already submitted your form";
+
+				studentDAO.returnStudentForm_Diat(user, model, error);
 
 				return "show-submitted-form";
 			}
@@ -91,15 +98,14 @@ public class StudentController {
 				studentDAO.insert_form_oik(user, fname, lname, email, phoneNumber, placeOfResidence, placeOfStudying,
 						department, yearOfAttendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
 			} else {
-				//String error = "It seems that you have already submitted your form!";
-				studentDAO.returnStudentForm_Oik(user, model);
+				String error = "You have already submitted your form";
+				studentDAO.returnStudentForm_Oik(user, model, error);
 
 				return "show-submitted-form";
 			}
 		}
 
-		//Attributes for inserts
-		// model.addAttribute("currentUser",user);
+		// Attributes for inserts
 		model.addAttribute("fname", fname);
 		model.addAttribute("lname", lname);
 		model.addAttribute("email", email);
@@ -116,16 +122,20 @@ public class StudentController {
 		return "show-submitted-form";
 	}
 
-	/*
-	 * @RequestMapping(value="/") protected String SubmitForm(){ List<String> list =
-	 * new ArrayList<String>(); return list; }
-	 */
-	@RequestMapping(value = "student-login/options/showResults", method = RequestMethod.GET)
-	protected String SeeResults() {
+	@RequestMapping(value = "login/main-menu-for-all/student-menu/showResults", method = RequestMethod.GET)
+	protected String SeeResults(Model model,HttpSession session) {
+		
+		String username = (String) session.getAttribute("user");
+		String dep = (String) session.getAttribute("department");
+		
+		if(dep.equals("Economics")) {
+			studentDAO.showPoints_oik(username, model);
+		}
+		
 		return "st-results";
 	}
 
-	@RequestMapping(value = "student-login/options/change-data", method = RequestMethod.GET)
+	@RequestMapping(value = "login/main-menu-for-all/student-menu/change-data", method = RequestMethod.GET)
 	protected String ChangePersonalData() {
 		return "st-change";
 	}
