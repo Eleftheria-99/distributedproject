@@ -1,6 +1,7 @@
 package dit.hua.project.controllers;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,10 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import dit.hua.project.database.Student_DAO;
-import dit.hua.project.entities.SubmittedForm_Diat;
-import dit.hua.project.entities.SubmittedForm_Geo;
-import dit.hua.project.entities.SubmittedForm_Oik;
-import dit.hua.project.entities.SubmittedForm_Plir;
 
 @Controller
 public class StudentChangeDataController {
@@ -21,84 +18,85 @@ public class StudentChangeDataController {
 	@Autowired
 	private Student_DAO studentDAO;
 
-	@RequestMapping(value = "student-login/options/change-data/newForm", method = RequestMethod.GET)
-	protected String ChangedForm(HttpServletRequest request, Model model) {
+	@RequestMapping(value = "login/main-menu-for-all/student-menu/change-data/newForm", method = RequestMethod.GET)
+	protected String ChangedForm(HttpServletRequest request, Model model,HttpSession session) {
 
 		String email = request.getParameter("email");
 		int phoneNumber = Integer.parseInt(request.getParameter("phonenumber"));
 		String placeOfResidence = request.getParameter("placeofliving");
-		String department = request.getParameter("Department");
+		//String department = request.getParameter("Department");
 
-		String user = StudentLogInController.currentUser;
+		//String user = StudentLogInController.currentUser; 
+		String user = (String) session.getAttribute("user");
+		System.out.println("USER INSIDE CHANGE DATA"+user);
+		
+		String department = (String) session.getAttribute("department");
 
+		
+		// INFORMATICS
 		if (department.equals("Informatics")) {
-			SubmittedForm_Plir form = new SubmittedForm_Plir();
-			form = studentDAO.change_form_plir(user, email, phoneNumber, placeOfResidence);
-			//System.out.println("fname is------->"+form.getFname());
+			if (studentDAO.if_form_NOT_exists_Plir(user)) {
+				String notfound = "Sorry, you haven't submitted your form yet!";
+				model.addAttribute("errormessage", notfound);
+				return "st-form";
+			} else {
+				// SubmittedForm_Plir form = new SubmittedForm_Plir();
+				studentDAO.change_form_plir(user, email, phoneNumber, placeOfResidence);
+				
+				String error = "This is your new up to date form!";
+				studentDAO.returnStudentForm_Plir(user, model,error);
 
-			model.addAttribute("fname", form.getFname());
-			model.addAttribute("lname", form.getLname());
-			model.addAttribute("email", email);
-			model.addAttribute("phone", phoneNumber);
-			model.addAttribute("pofresidence", placeOfResidence);
-			model.addAttribute("pofstudying", form.getPlaceOfStudying());
-			model.addAttribute("dep", form.getDepartment());
-			model.addAttribute("income", form.getAnnualIncome());
-			model.addAttribute("siblings", form.getSiblingsStudying());
-			model.addAttribute("family", form.getFamilyStatus());
-			model.addAttribute("year", form.getYearOfAttendance());
-			model.addAttribute("parents", form.getUnemployedParents());
+				return "show-submitted-form";
+			}
 
+			// GEOGRAPHY
 		} else if (department.equals("Geography")) {
-			SubmittedForm_Geo form = new SubmittedForm_Geo();
-			form = studentDAO.change_form_geo(user, email, phoneNumber, placeOfResidence);
+			if (studentDAO.if_form_NOT_exists_Geo(user)) {
+				String notfound = "Sorry, you haven't submitted your form yet!";
+				model.addAttribute("errormessage", notfound);
+				return "st-form";
+			} else {
 
-			model.addAttribute("fname", form.getFname());
-			model.addAttribute("lname", form.getLname());
-			model.addAttribute("email", email);
-			model.addAttribute("phone", phoneNumber);
-			model.addAttribute("pofresidence", placeOfResidence);
-			model.addAttribute("pofstudying", form.getPlaceOfStudying());
-			model.addAttribute("dep", form.getDepartment());
-			model.addAttribute("income", form.getAnnualIncome());
-			model.addAttribute("siblings", form.getSiblingsStudying());
-			model.addAttribute("family", form.getFamilyStatus());
-			model.addAttribute("year", form.getYearOfAttendance());
-			model.addAttribute("parents", form.getUnemployedParents());
+				// SubmittedForm_Geo form = new SubmittedForm_Geo();
+				studentDAO.change_form_geo(user, email, phoneNumber, placeOfResidence);
+				String error = "This is your new up to date form!";
+				studentDAO.returnStudentForm_Geo(user, model,error);
 
+				return "show-submitted-form";
+			}
+			// NUTRITION
 		} else if (department.equals("Nutrition")) {
-			SubmittedForm_Diat form = new SubmittedForm_Diat();
-			form = studentDAO.change_form_diat(user, email, phoneNumber, placeOfResidence);
+			if (studentDAO.if_form_NOT_exists_Diat(user)) {
+				String notfound = "Sorry, you haven't submitted your form yet!";
+				model.addAttribute("errormessage", notfound);
+				return "st-form";
+			} else {
+				// SubmittedForm_Diat form = new SubmittedForm_Diat();
+				studentDAO.change_form_diat(user, email, phoneNumber, placeOfResidence);
+				String error = "This is your new up to date form!";
 
-			model.addAttribute("fname", form.getFname());
-			model.addAttribute("lname", form.getLname());
-			model.addAttribute("email", email);
-			model.addAttribute("phone", phoneNumber);
-			model.addAttribute("pofresidence", placeOfResidence);
-			model.addAttribute("pofstudying", form.getPlaceOfStudying());
-			model.addAttribute("dep", form.getDepartment());
-			model.addAttribute("income", form.getAnnualIncome());
-			model.addAttribute("siblings", form.getSiblingsStudying());
-			model.addAttribute("family", form.getFamilyStatus());
-			model.addAttribute("year", form.getYearOfAttendance());
-			model.addAttribute("parents", form.getUnemployedParents());
-
+				studentDAO.returnStudentForm_Diat(user, model,error);
+				
+				return "show-submitted-form";
+			}
+			// ECONOMICS
 		} else if (department.equals("Economics")) {
-			SubmittedForm_Oik form = new SubmittedForm_Oik();
-			form = studentDAO.change_form_oik(user, email, phoneNumber, placeOfResidence);
+			if (studentDAO.if_form_NOT_exists_Oik(user)) {
+				System.out.println("INSIDE IF");
+				String notfound = "Sorry, you haven't submitted your form yet!";
+				model.addAttribute("errormessage", notfound);
+				return "st-form";
+			} else {
+				System.out.println("INSIDE ELSE");
+				// SubmittedForm_Oik form = new SubmittedForm_Oik();
+				studentDAO.change_form_oik(user, email, phoneNumber, placeOfResidence);
 
-			model.addAttribute("fname", form.getFname());
-			model.addAttribute("lname", form.getLname());
-			model.addAttribute("email", email);
-			model.addAttribute("phone", phoneNumber);
-			model.addAttribute("pofresidence", placeOfResidence);
-			model.addAttribute("pofstudying", form.getPlaceOfStudying());
-			model.addAttribute("dep", form.getDepartment());
-			model.addAttribute("income", form.getAnnualIncome());
-			model.addAttribute("siblings", form.getSiblingsStudying());
-			model.addAttribute("family", form.getFamilyStatus());
-			model.addAttribute("year", form.getYearOfAttendance());
-			model.addAttribute("parents", form.getUnemployedParents());
+				String error = "This is your new up to date form!";
+
+				studentDAO.returnStudentForm_Oik(user, model,error);
+
+				return "show-submitted-form";
+			}
 
 		}
 

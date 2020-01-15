@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import dit.hua.project.database.*;
 import dit.hua.project.entities.*;
-import javax.swing.*;
 
 @Controller
 public class EmployeeShowTheSubmittedFormsController {
@@ -35,45 +34,37 @@ public class EmployeeShowTheSubmittedFormsController {
 	private Plir_DAO plir_DAO; // interface
 	// an eixa parpanw apo 2 implementations 8elw qualifier !
 
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-submitted-forms-dep-diat", method = RequestMethod.GET)
-	public String showTheSubmittedForms(Model model) {
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat", method = RequestMethod.GET)
+	public String showTheSubmittedFormsDiat(Model model) {
 		show_the_submitted_forms_diat_query(model); // query to find the submitted forms in database
 		return "employee-show-the-submitted-forms";
 	}
 
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-submitted-forms-dep-geo", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo", method = RequestMethod.GET)
 	public String showTheSubmittedFormsGeo(Model model) {
 		show_the_submitted_forms_geo_query(model); // query to find the submitted forms in database
 		return "employee-show-the-submitted-forms";
 	}
 
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-submitted-forms-dep-oik", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik", method = RequestMethod.GET)
 	public String showTheSubmittedFormsOik(Model model) {
 		show_the_submitted_forms_oik_query(model); // query to find the submitted forms in database
 		return "employee-show-the-submitted-forms";
 	}
 
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-submitted-forms-dep-plir", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir", method = RequestMethod.GET)
 	public String showTheSubmittedFormsPlir(Model model) {
 		show_the_submitted_forms_plir_query(model);// query to find the submitted forms in database
 		return "employee-show-the-submitted-forms";
 	}
 
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-submitted-forms/decline", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/decline" , method = RequestMethod.GET)  //, "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/decline", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/decline", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/decline"}, method = RequestMethod.GET)
 	public String declineASubmittedForm(HttpServletRequest request, Model model) {
 
-		String string_id = request.getParameter("Id");
-		int id_of_the_submitted_form = 0;
-		if (string_id == null || string_id.length() == 0) {
-			id_of_the_submitted_form = -1; // in case of error
-		} else {
-			try {
-				id_of_the_submitted_form = Integer.parseInt(string_id);
-			} catch (Exception e) {
-				e.getStackTrace();
-			}
-		}
+		String username = request.getParameter("Username");
+		System.out.println(username);
 		String fname = request.getParameter("First Name");
+		System.out.println(fname);
 		String lname = request.getParameter("Last Name");
 
 		String string_year_of_attendance = request.getParameter("Year Of Attendance");
@@ -134,22 +125,24 @@ public class EmployeeShowTheSubmittedFormsController {
 
 		// first save the submitted form into the declined table and then delete it from
 		// the submitted forms table and finally find the rest submitted forms
-		if (string_id != null) {
+
 			if (department.equals("Nutrition")) {
 				diat_DAO.save_in_declinedforms_diat(fname, lname, email, int_phone_number, place_of_residence,
 						place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
 
-				diat_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form); // query to find the submitted forms
+				diat_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
 																					// in
 																					// database
+				System.out.println("quer");
 				show_the_submitted_forms_diat_query(model);
+				System.out.println("2");
 			} else if (department.equals("Geography")) {
 				geo_DAO.save_in_declinedforms_geo(fname, lname, email, int_phone_number, place_of_residence,
 						place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
 
-				geo_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form); // query to find the submitted forms
+				geo_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
 																					// in
 																					// database
 				show_the_submitted_forms_geo_query(model);
@@ -158,39 +151,29 @@ public class EmployeeShowTheSubmittedFormsController {
 						place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
 
-				oik_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form); // query to find the submitted forms
+				oik_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
 																					// in
 																					// database
 				show_the_submitted_forms_oik_query(model);
-			} else if (department.equals("Informatics")) {
+		 	} else if (department.equals("Informatics")) {
 				plir_DAO.save_in_declinedforms_plir(fname, lname, email, int_phone_number, place_of_residence,
 						place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
 
-				plir_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form); // query to find the submitted forms
+				plir_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
 																					// in
 																					// database
 				show_the_submitted_forms_plir_query(model);
-			}
-		}else { JOptionPane.showMessageDialog(null, "No form was found");}
-		return "employee-show-the-submitted-forms";
+ 		}else { JOptionPane.showMessageDialog(null, "No form was found");}
+		return "redirect:/employee-show-the-submitted-forms";
+	//	return  showTheSubmittedFormsDiat(model);
+		 // redirect
 	}
 
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-submitted-forms/accept", method = RequestMethod.GET)
+	@RequestMapping(value = {"/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/accept", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/accept", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/accept", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/accept"}, method = RequestMethod.GET)
 	public String AcceptASubmittedForm(HttpServletRequest request, Model model) {
 
-		int id_of_the_submitted_form = 0;
-		String string_id = request.getParameter("Id");
-		if (string_id == null || string_id.length() == 0) {
-			id_of_the_submitted_form = -1; // in case of error
-		} else {
-			try {
-				id_of_the_submitted_form = Integer.parseInt(string_id);
-			} catch (Exception e) {
-				e.getStackTrace();
-			}
-		}
-
+		String username = request.getParameter("Username");
 		String fname = request.getParameter("First Name");
 		String lname = request.getParameter("Last Name");
 		String string_year_of_attendance = request.getParameter("Year Of Attendance");
@@ -251,7 +234,7 @@ public class EmployeeShowTheSubmittedFormsController {
 			}
 		}
 
-		if (string_id != null) {  //if no form is found
+		if (username != null) {  //if form is found
 
 			// points are being calculated into the method save row in accepted table
 			if (department.equals("Nutrition")) { // first save the accepted form into the table, then delete it from
@@ -260,28 +243,28 @@ public class EmployeeShowTheSubmittedFormsController {
 				diat_DAO.save_a_row_in_table_acceptedforms_diatS(fname, lname, email, int_phone_number,
 						place_of_residence, place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				diat_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form);
+				diat_DAO.delete_a_row_from_subform_table(username);
 
 				show_the_submitted_forms_diat_query(model); // query to find the submitted forms in database
 			} else if (department.equals("Geography")) {
 				geo_DAO.save_a_row_in_table_acceptedforms_geo(fname, lname, email, int_phone_number, place_of_residence,
 						place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				geo_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form);
+				geo_DAO.delete_a_row_from_subform_table(username);
 
 				show_the_submitted_forms_geo_query(model); // query to find the submitted forms in database
 			} else if (department.equals("Economics")) {
 				oik_DAO.save_a_row_in_table_acceptedforms_oik(fname, lname, email, int_phone_number, place_of_residence,
 						place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				oik_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form);
+				oik_DAO.delete_a_row_from_subform_table(username);
 
 				show_the_submitted_forms_oik_query(model);// query to find the submitted forms in database
 			} else if (department.equals("Informatics")) {
 				plir_DAO.save_a_row_in_table_acceptedforms_plir(fname, lname, email, int_phone_number,
 						place_of_residence, place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				plir_DAO.delete_a_row_from_subform_table(id_of_the_submitted_form);
+				plir_DAO.delete_a_row_from_subform_table(username);
 
 				show_the_submitted_forms_plir_query(model); // query to find the submitted forms in database
 			}

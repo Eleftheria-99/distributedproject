@@ -2,8 +2,6 @@ package dit.hua.project.database;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Column;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
@@ -15,9 +13,7 @@ import org.springframework.stereotype.Repository;
 import dit.hua.project.entities.AcceptedForms_Plir;
 import dit.hua.project.entities.DeclinedForm_Plir;
 import dit.hua.project.entities.Final_Ranking_Plir;
-import dit.hua.project.entities.SubmittedForm_Diat;
 import dit.hua.project.entities.SubmittedForm_Plir;
-import dit.hua.project.entities.Users;
 
 @Repository // component that declares that exists communication with database
 public class Plir_DAOImpl implements Plir_DAO {
@@ -26,89 +22,39 @@ public class Plir_DAOImpl implements Plir_DAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	@Autowired
-	private UsersDAO usersDAO;
-
 	@Override
 	@Transactional // because it has to do with the database
 	public List<SubmittedForm_Plir> get_the_submitted_forms_plir() {
-		// String create_search_query = "from Subform_plir"; // SUBMFORM_PLIR
-		// System.out.println("query: " + create_search_query);
-
+		String create_search_query = "from SubmittedForm_Plir"; // SUBMFORM_PLIR
+		System.out.println("query: " + create_search_query);
+		
 		List<SubmittedForm_Plir> all_submittedForms_Plir = new ArrayList<>();
-		List<Users> list_users = new ArrayList<>();
-		// List<SubmittedForm_Plir> all_submittedForms_Plir = new ArrayList<>();
-		Users all_users = (Users) usersDAO.getUsers();
-		list_users.add(all_users);
-		// System.out.println(all_users.toString());
-		// try {
-		// ((Users) all_users).getSubmittedForm_Plir();
-		// System.out.println(((Users) all_users).getSubmittedForm_Plir().toString());
+     
+		// get current hibernate session
+		Session currentSession = sessionFactory.getCurrentSession();
+		try {
 
-		all_submittedForms_Plir = (List<SubmittedForm_Plir>) ((Users) all_users).getSubmittedForm_Plir();
+			Query<SubmittedForm_Plir> query = currentSession.createQuery(create_search_query, SubmittedForm_Plir.class); // create
+																															// a
+																															// query
 
-		for (int i = 0; i < list_users.size(); i++) {
-			String fname = list_users.get(i).getSubmittedForm_Plir().getFname();
-			String lname = list_users.get(i).getSubmittedForm_Plir().getLname();
-			String username = list_users.get(i).getSubmittedForm_Plir().getUsername();
-			String Email     = list_users.get(i).getSubmittedForm_Plir().getEmail();
+			// execute the query and get the results list
+			all_submittedForms_Plir = query.getResultList();
 
-			int PhoneNumber  = list_users.get(i).getSubmittedForm_Plir().getPhoneNumber();
-
-			String PlaceOfResidence = list_users.get(i).getSubmittedForm_Plir().getPlaceOfResidence();
-
-			String PlaceOfStudying = list_users.get(i).getSubmittedForm_Plir().getPlaceOfStudying();
-
-			String Department = list_users.get(i).getSubmittedForm_Plir().getDepartment();
-
-			int YearOfAttendance = list_users.get(i).getSubmittedForm_Plir().getYearOfAttendance();
-
-			String FamilyStatus  =list_users.get(i).getSubmittedForm_Plir().getFamilyStatus();
-
-			int SiblingsStudying  = list_users.get(i).getSubmittedForm_Plir().getSiblingsStudying();
-
-			String AnnualIncome  =list_users.get(i).getSubmittedForm_Plir().getAnnualIncome();
-
-			int UnemployedParents = list_users.get(i).getSubmittedForm_Plir().getUnemployedParents();
-			
-			SubmittedForm_Plir form = new  SubmittedForm_Plir(username,  fname,  lname, Email,  PhoneNumber,  PlaceOfResidence,
-					 PlaceOfStudying, Department, YearOfAttendance, FamilyStatus, SiblingsStudying,
-					 AnnualIncome, UnemployedParents); 
-			all_submittedForms_Plir.add(form);
-
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
 		}
-//		    // get current hibernate session
-//			Session currentSession = sessionFactory.getCurrentSession();
-//			System.out.println("current session done " );
-//			
-//			// create a query
-//			Query<SubmittedForm_Plir> query = currentSession.createQuery(create_search_query, SubmittedForm_Plir.class);
-//			System.out.println("after query " );
-//																												         
-//			// execute the query and get the results list
-//			List<SubmittedForm_Plir>  all_submittedForms_Plir = query.getResultList();
-//
-//		   // currentSession.getTransaction().commit();
-//			System.out.println("transaction done " );
+		 System.out.println("plir_dao_impl system out print ln and list.tostring:"+all_submittedForms_Plir.toString());
 
-//		} catch (Exception e) {
-//			e.getStackTrace();
-//			e.getMessage();
-//			e.getCause();
-//		}
-
-		// displayForms(all_submittedForms_Plir);
-
-		return all_submittedForms_Plir; // return the results in arraylist!
-	}
-
-	public void return_the_usernames_from_Table_User() {
-
+		 displayForms(all_submittedForms_Plir);
+		return all_submittedForms_Plir; // return the results !
 	}
 
 	@Override
 	public void displayForms(List<SubmittedForm_Plir> forms_list) {
-		System.out.println("display submitted forms from oiconomics found in database!");
+		System.out.println("display forms method : display submitted forms from oiconomics found in database!");
 		// display students
 		for (SubmittedForm_Plir users : forms_list) {
 			System.out.println(users);
@@ -149,6 +95,7 @@ public class Plir_DAOImpl implements Plir_DAO {
 
 		int points = -1; // in case of error
 		points = calculatePoints(submitted_form);
+		System.out.println(" plir dao impl point : " + points);
 
 		AcceptedForms_Plir form = new AcceptedForms_Plir(fname, lname, email, phone_number, place_of_residence,
 				place_of_living, department, year_of_attendance, family_state, number_of_siblings_studying,
@@ -253,18 +200,24 @@ public class Plir_DAOImpl implements Plir_DAO {
 
 	@Override
 	@Transactional // because it has to do with the database
-	public void delete_a_row_from_subform_table(int id_of_the_submitted_form) {
+	public void delete_a_row_from_subform_table(String username ) {   //ERRORR NEEDS CHANGEE !!
+	
 
-		String delete_query = "delete from Subform_plir where Subform_plir.id='" + id_of_the_submitted_form + "'";
-		System.out.println("query: " + delete_query);
+		//String delete_query = "delete from SubmittedForm_Plir where SubmittedForm_Plir.username='" + username+ "'";
+		//System.out.println("query: " + delete_query);
 
-		try {
+		
 			// get current hibernate session
 			Session currentSession = sessionFactory.getCurrentSession();
-
+			try {
 			// create a query
 			// Query<SubmittedForm_Diat> query =
-			currentSession.createQuery(delete_query, SubmittedForm_Plir.class).executeUpdate();
+			//currentSession.createQuery(delete_query, SubmittedForm_Plir.class).executeUpdate();
+				SubmittedForm_Plir subform = return_Submitted_Form_Plir(username);
+				if(subform != null) {
+					currentSession.delete(subform);
+				}
+
 
 		} catch (Exception e) {
 			System.out.println("error : delete query: Diat_DAOImpl");
@@ -283,7 +236,7 @@ public class Plir_DAOImpl implements Plir_DAO {
 		// returns the table acceptedforms_plir, returns all the submitted forms from
 		// the department of dietology
 
-		String create_search_query = "from Acceptedforms_plir order by points desc";
+		String create_search_query = "from AcceptedForms_Plir order by points desc";
 		System.out.println("query: " + create_search_query);
 
 		List<AcceptedForms_Plir> all_acceptedForms_Plir = new ArrayList<>();
@@ -313,7 +266,7 @@ public class Plir_DAOImpl implements Plir_DAO {
 			int limit_of_students_entitled_to_free_meals) { // returns the table acceptedforms_diat order by asc and
 															// only the students entitled to free meals
 
-		String create_search_query = "from Acceptedforms_plir order by points desc limit "
+		String create_search_query = "from AcceptedForms_Plir order by points desc limit "
 				+ limit_of_students_entitled_to_free_meals;
 		System.out.println("query: " + create_search_query);
 

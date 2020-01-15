@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
+	
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,8 +14,17 @@
 
 	<pre>
 	                                                                                                                  <a
-			href="/DistributedSystems/st-just-logged-out">Logout</a>
+			href="/DistributedSystems/just-logged-out">Logout</a>
 	</pre>
+	
+	<sec:authorize access="isAuthenticated()">
+		<div class="ui segment">
+			User:
+			<sec:authentication property="principal.username" />
+			, Role:
+			<sec:authentication property="principal.authorities" />
+		</div>
+	</sec:authorize>
 	
 	<h3>${message}</h3>
 	<br />
@@ -20,11 +32,11 @@
 	<br />
 	<br />
 	<br /> 1. Fill in the
-	<a href="/DistributedSystems/student-login/options/showForm">form</a>
+	<a href="/DistributedSystems/login/main-menu-for-all/student-menu/showForm">form</a>
 	in order to get free broad at the University!
 	<br /> 2. Update your submitted form and
-	<a href="/DistributedSystems/student-login/options/change-data">change</a>
+	<a href="/DistributedSystems/login/main-menu-for-all/student-menu/change-data">change</a>
 	your personal data!
 	<br /> 3. See the
-	<a href="/DistributedSystems/student-login/options/showResults">points</a>
+	<a href="/DistributedSystems/login/main-menu-for-all/student-menu/showResults">points</a>
 	of your form and your place in the ranking with the other students!

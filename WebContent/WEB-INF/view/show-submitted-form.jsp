@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,13 +8,22 @@
 <title>Your form</title>
 </head>
 <body>
-${error}
-<br/><br/>
 Hello ${username}
 <%--  ${currentUser} --%>
+
+	<h3>
+		<sec:authorize access="isAuthenticated()">
+			<div class="ui segment">
+				User:
+				<sec:authentication property="principal.username" />
+				, Role:
+				<sec:authentication property="principal.authorities" />
+			</div>
+		</sec:authorize>
+		</h3>
 	This is your form, if you want to change some of your data you can
 	here:
-	<a href="/DistributedSystems/student-login/options/change-data">Change data</a>
+	<a href="/DistributedSystems/login/main-menu-for-all/student-login/options/change-data">Change data</a>
 	<!-- in reality it will load form from db -->
 	<br />
 	<br />

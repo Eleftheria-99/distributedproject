@@ -6,11 +6,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Employee Log In</title>
+<title>Log In Page</title>
 </head>
 <body>
 	<h3>
-		<b>Employee Log In</b>
+		<b>Log In Page</b>
 	</h3>
 
 	<br />
@@ -23,9 +23,9 @@
 	<c:if test="${param.error != null}">
 		<i>Sorry! Invalid username/password!</i>
 	</c:if>
-	<div id=" employee-login in order to see the menu">
+	<div id=" login for all in order to see the menu">
 		<form:form method="POST"
-			action="/DistributedSystems/employee-login/employee-menu">         
+			action="/DistributedSystems/login/main-menu-for-all">         
 	Username : <input name="username" id="username" type="text" required />
 			<br />
 	Password: <input name="password" id="password" type="password" required />

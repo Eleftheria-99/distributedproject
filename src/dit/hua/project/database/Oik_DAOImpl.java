@@ -16,6 +16,7 @@ import dit.hua.project.entities.DeclinedForm_Oik;
 import dit.hua.project.entities.Final_Ranking_Oik;
 import dit.hua.project.entities.SubmittedForm_Oik;
 
+
 @Repository // component that declares that exists communication with database
 public class Oik_DAOImpl implements Oik_DAO {
 
@@ -27,7 +28,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	@Transactional // because it has to do with the database
 	public List<SubmittedForm_Oik> get_the_submitted_forms_oik() {
 
-		String create_search_query = "from Subform_oik"; // SUBMFORM_OIK
+		String create_search_query = "from SubmittedForm_Oik"; // SUBMFORM_OIK
 		System.out.println("query: " + create_search_query);
 
 		List<SubmittedForm_Oik> all_submittedForms_Oik = new ArrayList<>();
@@ -36,8 +37,10 @@ public class Oik_DAOImpl implements Oik_DAO {
 			// get current hibernate session
 			Session currentSession = sessionFactory.getCurrentSession();
 			System.out.println("session");
-			Query<SubmittedForm_Oik> query = currentSession.createQuery(create_search_query, SubmittedForm_Oik.class); // create
-																														// a
+			
+			// create a query
+			Query<SubmittedForm_Oik> query = currentSession.createQuery(create_search_query, SubmittedForm_Oik.class); 
+			
 			// execute the query and get the results list
 			all_submittedForms_Oik = query.getResultList();
 			System.out.println("query result :"+ all_submittedForms_Oik.toString());																								// query
@@ -93,6 +96,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 
 		int points = -1; // in case of error
 		points = calculatePoints(submitted_form);
+		System.out.println("oik dao impl point : " + points);
 
 		AcceptedForm_Oik form = new AcceptedForm_Oik(fname, lname, email, phone_number, place_of_residence,
 				place_of_living, department, year_of_attendance, family_state, number_of_siblings_studying,
@@ -123,7 +127,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	public ArrayList<AcceptedForm_Oik> check_if_inserted_row_exists(String given_id) {
 		// to check if the inserted row exists! //String given_id_ = retrieve from db ;
 
-		String create_search_query = "from AcceptedForms_diat a where a.id='" + given_id + "'";
+		String create_search_query = "from AcceptedForm_Oik a where a.id='" + given_id + "'";
 		System.out.println("query " + create_search_query);
 
 		List<AcceptedForm_Oik> list_inserted_row = new ArrayList<>();
@@ -196,18 +200,24 @@ public class Oik_DAOImpl implements Oik_DAO {
 
 	@Override
 	@Transactional // because it has to do with the database
-	public void delete_a_row_from_subform_table(int id_of_the_submitted_form) {
+	public void delete_a_row_from_subform_table(String username) {
 
-		String delete_query = "from Subform_oik where Subform_oik.id='" + id_of_the_submitted_form + "'";
-		System.out.println("query: " + delete_query);
+		//String delete_query = "from SubmittedForm_Oik where SubmittedForm_Oik.id='" + id_of_the_submitted_form + "'";
+		//System.out.println("query: " + delete_query);
 
-		try {
+		
 			// get current hibernate session
 			Session currentSession = sessionFactory.getCurrentSession();
-
+			try {
 			// create a query
 			// Query<SubmittedForm_Diat> query =
-			currentSession.createQuery(delete_query, SubmittedForm_Oik.class).executeUpdate();
+			//currentSession.createQuery(delete_query, SubmittedForm_Oik.class).executeUpdate();
+			SubmittedForm_Oik subform = return_Submitted_Form_Oik(username);
+			
+			if(subform != null) {
+				currentSession.delete(subform);
+			}
+
 
 		} catch (Exception e) {
 			System.out.println("error : delete query: Diat_DAOImpl");
@@ -224,7 +234,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	@Transactional // because it has to do with the database
 	public List<AcceptedForm_Oik> get_the_accepted_forms_oik() {// returns the table acceptedforms_diat
 
-		String create_search_query = "from Acceptedform_oik order by points desc"; // UBMFORM_DIAT
+		String create_search_query = "from AcceptedForm_Oik order by points desc"; // UBMFORM_DIAT
 		System.out.println("query: " + create_search_query);
 
 		List<AcceptedForm_Oik> all_acceptedForms_Oik = new ArrayList<>();
@@ -255,7 +265,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 			int limit_of_students_entitled_to_free_meals) { // returns the table acceptedforms_oik order by asc and only
 															// the students entitled to free meals
 
-		String create_search_query = "from Acceptedform_oik order by points desc limit "
+		String create_search_query = "from AcceptedForm_Oik order by points desc limit "
 				+ limit_of_students_entitled_to_free_meals;
 		System.out.println("query: " + create_search_query);
 

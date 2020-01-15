@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,11 +9,18 @@
 <title>Employee Show The List</title>
 </head>
 <body>
-	<pre>
-	                                                                                                                  <a
-			href="http://localhost/DistributedSystems/employee-login/just-logged-out">Logout</a>
-	</pre>
-	You are an employee!
+	<h3>
+		<sec:authorize access="isAuthenticated()">
+			<div class="ui segment">
+				User:
+				<sec:authentication property="principal.username" />
+				, Role:
+				<sec:authentication property="principal.authorities" />
+			</div>
+		</sec:authorize>
+		<br />
+		<br /> You are an employee!
+	</h3>
 	<br />
 	<br /> Here is the list with the accepted students that want to
 	petition for free meals ! First is the student that has the most points

@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" 	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,10 +11,18 @@
 
 </head>
 <body>
-	<pre>
-	                                                                                                                  <a
-			href="http://localhost/DistributedSystems/employee-login/just-logged-out">Logout</a>
-	</pre>
+<h3>
+		<sec:authorize access="isAuthenticated()">
+			<div class="ui segment">
+				User:
+				<sec:authentication property="principal.username" />
+				, Role:
+				<sec:authentication property="principal.authorities" />
+			</div>
+		</sec:authorize>
+		<br />
+		<br /> You are an employee!
+	</h3>
 	Here are the submitted forms : You will be asked to either accept or
 	decline every form, based on if the submitted form meets the criteria
 	or not !
@@ -23,7 +32,7 @@
 			<!--  add our html table here -->
 			<table>
 				<tr>
-					<th>Id</th>
+				    <th>Username</th>
 					<th>First Name</th>
 					<th>Last Name</th>
 					<th>Email</th>
@@ -62,25 +71,25 @@
 				<c:forEach var="tempCustomer" items="${arraylist_subforms}">
 
 					<tr>
-						<td>${tempCustomer.id}</td>
-						<td>${tempCustomer.firstName}</td>
-						<td>${tempCustomer.lastName}</td>
+					    <td>${tempCustomer.username}</td>
+						<td>${tempCustomer.fname}</td>
+						<td>${tempCustomer.lname}</td>
 						<td>${tempCustomer.email}</td>
 						<td>${tempCustomer.phoneNumber}</td>
 						<td>${tempCustomer.placeOfResidence}</td>
 						<td>${tempCustomer.placeOfStudying}</td>
 						<td>${tempCustomer.department}</td>
-						<td>${tempCustomer.yearOfAttendance}}</td>
+						<td>${tempCustomer.yearOfAttendance}</td>
 						<td>${tempCustomer.familyStatus}</td>
 						<td>${tempCustomer.siblingsStudying}</td>
 						<td>${tempCustomer.annualIncome}</td>
 						<td>${tempCustomer.unemployedParents}</td>
+					 <td><a
+							href="/DistributedSystems/login/main-menu-for-all/employee-login/employee-menu/employee-show-the-submitted-forms-dep-diat/decline">Decline
+								</a></td>
 						<td><a
-							href="/DistributedSystems/employee-login/employee-menu/employee-show-the-submitted-forms/decline">Decline
-								the form</a></td>
-						<td><a
-							href="/DistributedSystems/employee-login/employee-menu/employee-show-the-submitted-forms/accept">Accept
-								the form</a></td>
+							href="/DistributedSystems/login/main-menu-for-all/employee-login/employee-menu/employee-show-the-submitted-forms-dep-diat/accept">Accept
+								</a></td>
 					</tr>
 				</c:forEach>
 

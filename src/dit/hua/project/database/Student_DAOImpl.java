@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 
+import dit.hua.project.entities.AcceptedForm_Oik;
+import dit.hua.project.entities.DeclinedForm_Oik;
 import dit.hua.project.entities.SubmittedForm_Diat;
 import dit.hua.project.entities.SubmittedForm_Geo;
 import dit.hua.project.entities.SubmittedForm_Oik;
@@ -22,6 +24,27 @@ public class Student_DAOImpl implements Student_DAO {
 	// inject the session factory
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	@Override
+	@Transactional
+	public String findwhichDepartment(String username) {
+
+		Users user = new Users();
+		String department = "";
+
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+			user = currentSession.get(Users.class, username);
+			department = user.getDepartment();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return department;
+	}
 
 	@Override
 	@Transactional
@@ -166,14 +189,13 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		//return form;
+		// return form;
 
 	}
 
 	@Override
 	@Transactional
-	public void change_form_plir(String username, String email, int phoneNumber,
-			String placeOfResidence) {
+	public void change_form_plir(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
 		try {
@@ -193,14 +215,13 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		//return form;
+		// return form;
 
 	}
 
 	@Override
 	@Transactional
-	public void change_form_diat(String username, String email, int phoneNumber,
-			String placeOfResidence) {
+	public void change_form_diat(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
 		try {
@@ -217,7 +238,7 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		//return form;
+		// return form;
 
 	}
 
@@ -240,13 +261,13 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		//return form;
+		// return form;
 	}
 
 	@Override
 	@Transactional
 	public boolean if_form_NOT_exists_Oik(String username) {
-		
+
 		try {
 
 			Session currentSession = sessionFactory.getCurrentSession();
@@ -285,7 +306,7 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 			return true;
-			
+
 		}
 
 	}
@@ -336,7 +357,7 @@ public class Student_DAOImpl implements Student_DAO {
 
 	@Override
 	@Transactional
-	public void returnStudentForm_Oik(String username, Model model) {
+	public void returnStudentForm_Oik(String username, Model model, String error) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
 		try {
@@ -349,7 +370,6 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getCause();
 		}
 
-		String error = "This is your submitted form!";
 		model.addAttribute("error", error);
 		model.addAttribute("fname", form.getFname());
 		model.addAttribute("lname", form.getLname());
@@ -367,7 +387,7 @@ public class Student_DAOImpl implements Student_DAO {
 
 	@Override
 	@Transactional
-	public void returnStudentForm_Plir(String username, Model model) {
+	public void returnStudentForm_Plir(String username, Model model, String error) {
 
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
 
@@ -381,8 +401,7 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		
-		String error = "This is your submitted form!";
+
 		model.addAttribute("error", error);
 		model.addAttribute("fname", form.getFname());
 		model.addAttribute("lname", form.getLname());
@@ -401,7 +420,7 @@ public class Student_DAOImpl implements Student_DAO {
 
 	@Override
 	@Transactional
-	public void returnStudentForm_Diat(String username, Model model) {
+	public void returnStudentForm_Diat(String username, Model model, String error) {
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
 		try {
 			Session currentSession = sessionFactory.getCurrentSession();
@@ -412,8 +431,7 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		
-		String error = "This is your submitted form!";
+
 		model.addAttribute("error", error);
 		model.addAttribute("fname", form.getFname());
 		model.addAttribute("lname", form.getLname());
@@ -431,7 +449,7 @@ public class Student_DAOImpl implements Student_DAO {
 
 	@Override
 	@Transactional
-	public void returnStudentForm_Geo(String username, Model model) {
+	public void returnStudentForm_Geo(String username, Model model, String error) {
 		SubmittedForm_Geo form = new SubmittedForm_Geo();
 		try {
 			Session currentSession = sessionFactory.getCurrentSession();
@@ -442,8 +460,7 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		
-		String error = "This is your submitted form!";
+
 		model.addAttribute("error", error);
 		model.addAttribute("fname", form.getFname());
 		model.addAttribute("lname", form.getLname());
@@ -457,6 +474,51 @@ public class Student_DAOImpl implements Student_DAO {
 		model.addAttribute("family", form.getFamilyStatus());
 		model.addAttribute("year", form.getYearOfAttendance());
 		model.addAttribute("parents", form.getUnemployedParents());
+	}
+
+	@Override
+	@Transactional
+	public void showPoints_oik(String username, Model model) {
+
+		AcceptedForm_Oik acceptedform = new AcceptedForm_Oik();
+		DeclinedForm_Oik declinedform = new DeclinedForm_Oik();
+		// Final_Ranking_Oik ranking = new Final_Ranking_Oik();
+		SubmittedForm_Oik form = new SubmittedForm_Oik();
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+			form = currentSession.get(SubmittedForm_Oik.class, username);
+			String fname = form.getFname();
+			// if form is declined
+			for (int id = 1; id <= 40; id++) {
+				declinedform = currentSession.get(DeclinedForm_Oik.class, id);
+				acceptedform = currentSession.get(AcceptedForm_Oik.class, id);
+				
+				if (declinedform.getFname().equals(fname)) {
+					model.addAttribute("declined", "Unfortunately your form was declined!");
+					model.addAttribute("errormessage","");
+					break;
+					
+				} else if (acceptedform.getFname().equals(fname)) {
+					model.addAttribute("points", acceptedform.getPoints());
+					model.addAttribute("errormessage","");
+					//model.addAttribute("rank", id);
+					break;
+				}else {
+					model.addAttribute("errormessage","Sorry, this is not available yet!");
+					
+				}
+			}
+			
+			
+		} catch (
+
+		Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+
 	}
 
 }

@@ -10,10 +10,10 @@
 <title>Employee-menu</title>
 </head>
 <body>
-	<pre>
+<!-- 	<pre>
 	                                                                                                                  <a
 			href="http://localhost/DistributedSystems/employee-login/just-logged-out">Logout</a>
-	</pre>
+	</pre>  -->
 	<h3>
 		<sec:authorize access="isAuthenticated()">
 			<div class="ui segment">
@@ -23,9 +23,10 @@
 				<sec:authentication property="principal.authorities" />
 			</div>
 		</sec:authorize>
+		</h3>
 		<br />
 		<br /> You are an employee!
-	</h3>
+	
 	${message}
 
 	<br />
@@ -40,7 +41,7 @@
 	<div
 		id="div button show  the submitted forms dep. dietology to employee">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-submitted-forms-dep-diat">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat">Show
 			the submitted forms of the students of the department of dietology</a>
 
 	</div>
@@ -49,7 +50,7 @@
 	<div
 		id="div button show  the submitted forms dep. geography to employee">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-submitted-forms-dep-geo">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo">Show
 			the submitted forms of the students of the department of geography</a>
 
 	</div>
@@ -58,7 +59,7 @@
 	<div
 		id="div button show  the submitted forms dep. economics  to employee">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-submitted-forms-dep-oik">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik">Show
 			the submitted forms of the students of the department of economics</a>
 
 	</div>
@@ -67,7 +68,7 @@
 	<div
 		id="div button show  the submitted forms dep. informatics to employee">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-submitted-forms-dep-plir">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir">Show
 			the submitted forms of the students of the department of informatics</a>
 
 	</div>
@@ -78,7 +79,7 @@
 	<br />
 	<div id="div button show the list for dept. of  dietology">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-list-with-counted-points-dietology">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-dietology">Show
 			the list for department of dietology</a>
 
 	</div>
@@ -86,7 +87,7 @@
 	<br />
 	<div id="div button show the list for dept. of geograpyhy">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-list-with-counted-points-geography">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-geography">Show
 			the list for department of geography</a>
 
 	</div>
@@ -94,7 +95,7 @@
 	<br />
 	<div id="div button show the list for dept. of economics">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-list-with-counted-points-economics">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-economics">Show
 			the list for department of economics</a>
 
 	</div>
@@ -102,7 +103,7 @@
 	<br />
 	<div id="div button show the list for dept. of informatics">
 		<a
-			href="/DistributedSystems/employee-login/employee-menu/employee-show-the-list-with-counted-points-informatics">Show
+			href="/DistributedSystems/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-informatics">Show
 			the list for department of informatics</a>
 
 	</div>

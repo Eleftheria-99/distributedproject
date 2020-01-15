@@ -34,10 +34,14 @@ public interface Student_DAO {
 	public boolean if_form_NOT_exists_Diat(String username);
 	public boolean if_form_NOT_exists_Geo(String username);
 	
-	public void returnStudentForm_Oik(String username,Model model);
-	public void returnStudentForm_Plir(String username,Model model);
-	public void returnStudentForm_Diat(String username,Model model);
-	public void returnStudentForm_Geo(String username,Model model);
+	public void returnStudentForm_Oik(String username,Model model,String error);
+	public void returnStudentForm_Plir(String username,Model model,String error);
+	public void returnStudentForm_Diat(String username,Model model,String error);
+	public void returnStudentForm_Geo(String username,Model model,String error);
+	
+	public String findwhichDepartment(String username);
+	
+	public void showPoints_oik(String username,Model model);
 }
 
 

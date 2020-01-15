@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,16 +11,28 @@
 </head>
 <body>
 
-<pre>
-	                                                                                                                  <a href="/DistributedSystems/st-just-logged-out">Logout</a>
+	<pre>
+	                                                                                                                  <a
+			href="/DistributedSystems/just-logged-out">Logout</a>
 	</pre>
+	<sec:authorize access="isAuthenticated()">
+		<div class="ui segment">
+			User:
+			<sec:authentication property="principal.username" />
+			, Role:
+			<sec:authentication property="principal.authorities" />
+		</div>
+	</sec:authorize>
 	${errormessage}
 	<br />
 	<br />
 	<h3>Fill in the form below:</h3>
-	<br />
-	<br />
-	<form action="/DistributedSystems/student-login/options/showForm/StudentForm" method="GET">
+	
+	<form
+		action="/DistributedSystems/login/main-menu-for-all/student-menu/showForm/StudentForm"
+		method="GET">
+		<h3>Department :<i> ${department}</i></h3>
+		<br>
 		<table>
 			<tbody>
 				<tr>
@@ -35,7 +49,8 @@
 				</tr>
 				<tr>
 					<td>Phone number :</td>
-					<td><input name="phonenumber" type="number" size="30" value="" required/></td>
+					<td><input name="phonenumber" type="number" size="30" value=""
+						required /></td>
 				</tr>
 				<tr>
 					<td>Place of residence :</td>
@@ -46,16 +61,7 @@
 					<td><input name="placeofstudying" type="text" size="30"
 						value=""></td>
 				</tr>
-				<tr>
-					<td>Department of study:</td>
-					<td><select name="Department">
-							<!-- <option value="">Choose an option...</option> -->
-							<option value="Informatics">Informatics</option>
-							<option value="Geography">Geography</option>
-							<option value="Nutrition">Nutrition</option>
-							<option value="Economics">Economics</option>
-					</select></td>
-				</tr>
+
 				<tr>
 					<td>Year of attendance :</td>
 					<td><input name="yearofattendance" type="number" size="30"
@@ -97,4 +103,3 @@
 		</table>
 		<br /> <input type="submit" value="Submit Form" /> <br />
 	</form>
-
