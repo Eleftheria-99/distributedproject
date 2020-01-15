@@ -38,8 +38,10 @@ public class SupervisorMenuChoicesController {
 
 	// I NEED TO KEEP ONLY THE FIRST E.G. 80 PERSONS AND SAVE THEM INTO FINAL
 	// RANKING TABLE CHANGE QUERY !!!!!!!!!!
+	
+//			href="/DistributedSystems/login/main-menu-for-all/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-diat">Count
 
-	@RequestMapping(value = "/supervisor-login/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-diat", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-diat", method = RequestMethod.GET)
 	public String create_final_ranking_supervisor_dep_diat(Model model) {
 		System.out.println("count limit of students entitled to free meals - dep. diat ");
 
@@ -52,7 +54,7 @@ public class SupervisorMenuChoicesController {
 		ArrayList<AcceptedForms_Diat> arraylist_acceptedforms_diat = new ArrayList<>();
 		try {
 			arraylist_acceptedforms_diat = diat_DAO
-					.get_the_accepted_forms_order_by_asc_and_until_limit_diat(final_number); // get all submitted forms
+					.get_the_accepted_forms_order_by_desc_and_until_limit_diat(final_number); // get all submitted forms
 																								// from DAO order by desc
 																								// and only the number
 																								// of students entitled
@@ -78,7 +80,7 @@ public class SupervisorMenuChoicesController {
 		return "supervisor-show-final-ranking";
 	}
 
-	@RequestMapping(value = "/supervisor-login/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-geo", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-geo", method = RequestMethod.GET)
 	public String create_final_ranking_supervisor_dep_geo(Model model) {
 		System.out.println("count limit of students entitled to free meals - dep. geo  ");
 
@@ -121,7 +123,7 @@ public class SupervisorMenuChoicesController {
 		return "supervisor-show-final-ranking";
 	}
 
-	@RequestMapping(value = "/supervisor-login/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-eco", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-eco", method = RequestMethod.GET)
 	public String create_final_ranking_supervisor_dep_eco(Model model) {
 		System.out.println("count limit of students entitled to free meals - dep. oik ");
 		int number_of_students_of_the_department = 40;  // that could be retrieved from database too
@@ -163,7 +165,7 @@ public class SupervisorMenuChoicesController {
 		return "supervisor-show-final-ranking";
 	}
 
-	@RequestMapping(value = "/supervisor-login/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-infor", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all/supervisor-menu/supervisor-count-limit-of-students-entitled-to-free-meals-and-create-final-ranking-dep-infor", method = RequestMethod.GET)
 	public String create_final_ranking_supervisor_dep_infor(Model model) {
 		System.out.println("count limit of students entitled to free meals - dep. plir  ");
 		int number_of_students_of_the_department = 40;  // that could be retrieved from database too
