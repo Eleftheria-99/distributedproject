@@ -1,0 +1,23 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style><%@include file="/WEB-INF/resources/css/style_for_footer.css"%>
+</style>
+</head>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<footer>
+<div class="footer-wrapper">
+<div class ="single-footer">@ 2019 HUA Group-work : Makri Elpida - Papageorgiou Eleftheria- Protospalti Eirini. All Rights Reserved.</div>
+</div>
+</footer>
+<!--#800000; 	#0000CD #191970 #4169E1	-->
+<!-- oxi:  #0000FF  #4169E1  -->
+</body>
+</html>
+
+<!-- the lower part of the page  -->
