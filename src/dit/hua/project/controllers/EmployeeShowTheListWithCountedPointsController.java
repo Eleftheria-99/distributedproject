@@ -33,7 +33,7 @@ public class EmployeeShowTheListWithCountedPointsController {
 	@Autowired
 	private Plir_DAO plir_DAO; // interface
 	
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-list-with-counted-points-dietology",method = RequestMethod.GET )
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-dietology",method = RequestMethod.GET )
 	public String showTheListWithCountedpointsDiet(Model model){
 		try {
 			List<AcceptedForms_Diat> arraylist_acceptedforms_diat = diat_DAO.get_the_accepted_forms_diat(); // get all submitted forms from DAO
@@ -43,7 +43,7 @@ public class EmployeeShowTheListWithCountedPointsController {
 		}
 		return "employee-show-the-list-with-counted-points";
 	}
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-list-with-counted-points-geography",method = RequestMethod.GET )
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-geography",method = RequestMethod.GET )
 	public String showTheListWithCountedpointsGeo(Model model){
 		try {
 			List<AcceptedForm_Geo> arraylist_acceptedforms_geo = geo_DAO.get_the_accepted_forms_geo(); // get all submitted forms from DAO
@@ -53,7 +53,7 @@ public class EmployeeShowTheListWithCountedPointsController {
 		}
 		return "employee-show-the-list-with-counted-points";
 	}
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-list-with-counted-points-economics",method = RequestMethod.GET )
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-economics",method = RequestMethod.GET )
 	public String showTheListWithCountedpointsEco(Model model){
 		try {
 			List<AcceptedForm_Oik> arraylist_acceptedforms_oik = oik_DAO.get_the_accepted_forms_oik(); // get all submitted forms from DAO
@@ -63,7 +63,7 @@ public class EmployeeShowTheListWithCountedPointsController {
 		}
 		return "employee-show-the-list-with-counted-points";
 	}
-	@RequestMapping(value = "/employee-login/employee-menu/employee-show-the-list-with-counted-points-informatics",method = RequestMethod.GET )
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-list-with-counted-points-informatics",method = RequestMethod.GET )
 	public String showTheListWithCountedpointsInfor(Model model){
 		try {
 			List<AcceptedForms_Plir> arraylist_acceptedforms_plir = plir_DAO.get_the_accepted_forms_plir(); // get all submitted forms from DAO
