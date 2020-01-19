@@ -19,8 +19,7 @@
 			</div>
 		</sec:authorize>
 		<br />
-		<br /> You are an employee!
-	</h3>
+			</h3>
 	<br />
 	<br /> Here is the list with the accepted students that want to
 	petition for free meals ! First is the student that has the most points
@@ -37,13 +36,14 @@
 					<th>Email</th>
 					<th>PhoneNumber</th>
 					<th>Place Of Residence</th>
-					<th>Place Of Studying</th>
+					<th>Place Of Studying/Living</th>
 					<th>Department</th>
 					<th>Year Of Attendance</th>
 					<th>Family Status</th>
 					<th>Sibling's Studying</th>
 					<th>Annual Income</th>
 					<th>Unemployed Parents</th>
+					<th>Points</th>
 
 
 					<!-- loop over and print all submitted forms that have been retrieved from the databases -->
@@ -51,18 +51,19 @@
 
 						<tr>
 							<td>${tempCustomer.id}</td>
-							<td>${tempCustomer.firstName}</td>
-							<td>${tempCustomer.lastName}</td>
+							<td>${tempCustomer.fname}</td>
+							<td>${tempCustomer.lname}</td>
 							<td>${tempCustomer.email}</td>
-							<td>${tempCustomer.phoneNumber}</td>
-							<td>${tempCustomer.placeOfResidence}</td>
-							<td>${tempCustomer.placeOfStudying}</td>
+							<td>${tempCustomer.phone_number}</td>
+							<td>${tempCustomer.place_of_residence}</td>
+							<td>${tempCustomer.place_of_living}</td>
 							<td>${tempCustomer.department}</td>
-							<td>${tempCustomer.yearOfAttendance}}</td>
-							<td>${tempCustomer.familyStatus}</td>
-							<td>${tempCustomer.siblingsStudying}</td>
-							<td>${tempCustomer.annualIncome}</td>
-							<td>${tempCustomer.unemployedParents}</td>
+							<td>${tempCustomer.year_of_attendance}</td>
+							<td>${tempCustomer.family_state}</td>
+							<td>${tempCustomer.number_of_siblings_studying}</td>
+							<td>${tempCustomer.annual_family_income}</td>
+							<td>${tempCustomer.number_of_unemployed_parents}</td>
+							<td>${tempCustomer.points}</td>
 						</tr>
 					</c:forEach>
 			</table>

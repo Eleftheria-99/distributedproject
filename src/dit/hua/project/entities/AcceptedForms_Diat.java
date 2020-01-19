@@ -1,18 +1,20 @@
 package dit.hua.project.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name = "ACCEPTEDFORMS_DIAT")
-public class AcceptedForms_Diat {
+public class AcceptedForms_Diat   implements Serializable{
+	private static final long serialVersionUID = 1L;
+
 	@Id                       //primary key 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
+    /**@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     **/
 	@Column(name = "ID")
 	protected int id;
 	

@@ -167,15 +167,15 @@ public class Diat_DAOImpl implements Diat_DAO {
 			// currentSession.createQuery(save_query, AcceptedForms_Diat.class); // create a
 			// query
 			currentSession.save(form);
-
+			currentSession.flush();
+			System.out.println("ROW SUBMITTED INTO ACCEPTED FORMS SUCCESSFULLY");
 		} catch (Exception e) {
 			System.out.println("ROW NOT SUBMITTED INTO ACCEPTED FORMS SUCCESSFULLY");
 			e.getStackTrace();
 			e.getMessage();
 			e.getCause();
 		}
-		System.out.println("ROW SUBMITTED INTO ACCEPTED FORMS SUCCESSFULLY");
-
+		
 	}
 
 	@Override
@@ -334,7 +334,7 @@ public class Diat_DAOImpl implements Diat_DAO {
 			}
 
 			// points from place of studying
-			if (!form.getPlaceOfStudying().equals(form.getPlaceOfResidence())) {
+			if (form.getPlaceOfStudying() !=form.getPlaceOfResidence()) {
 				countpoints += 50;
 			}
 		}

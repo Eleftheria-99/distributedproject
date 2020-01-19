@@ -1,5 +1,6 @@
 package dit.hua.project.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,24 @@ public class EmployeeShowTheSubmittedFormsController {
 	private Plir_DAO plir_DAO; // interface
 	// an eixa parpanw apo 2 implementations 8elw qualifier !
 
+	String username = null;
+	String fname = null;
+	String lname = null;
+	String string_year_of_attendance = null;
+	int int_year_of_attendance = 0;
+	String email = null;
+	String string_phone_number = null;
+	int int_phone_number = 0;
+	String department = null;
+	String place_of_residence = null;
+	String place_of_living = null;
+	String annual_family_income = null;
+	String string_number_of_siblings_studying = null;
+	String family_state = null;
+	String string_number_of_unemployed_parents = null;
+	int int_number_of_siblings_studying = 0;
+	int int_number_of_unemployed_parents = 0;
+
 	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat", method = RequestMethod.GET)
 	public String showTheSubmittedFormsDiat(Model model) {
 		show_the_submitted_forms_diat_query(model); // query to find the submitted forms in database
@@ -58,17 +77,19 @@ public class EmployeeShowTheSubmittedFormsController {
 		return "employee-show-the-submitted-forms";
 	}
 
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/decline" , method = RequestMethod.GET)  //, "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/decline", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/decline", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/decline"}, method = RequestMethod.GET)
-	public String declineASubmittedForm(HttpServletRequest request, Model model) {
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/decline", method = RequestMethod.POST)
+	public String declineASubmittedFormDiat(HttpServletRequest request, Model model) {
 
-		String username = request.getParameter("Username");
-		System.out.println(username);
-		String fname = request.getParameter("First Name");
-		System.out.println(fname);
-		String lname = request.getParameter("Last Name");
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
 
-		String string_year_of_attendance = request.getParameter("Year Of Attendance");
-		int int_year_of_attendance = 0;
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
+
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
 		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
 			int_year_of_attendance = -1; // in case of error
 		} else {
@@ -78,10 +99,11 @@ public class EmployeeShowTheSubmittedFormsController {
 				e.getStackTrace();
 			}
 		}
-		String email = request.getParameter("Email");
 
-		String string_phone_number = request.getParameter("PhoneNumber");
-		int int_phone_number = 0;
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
+
 		if (string_phone_number == null || string_phone_number.length() == 0) {
 			int_phone_number = -1; // in case of error
 		} else {
@@ -91,14 +113,16 @@ public class EmployeeShowTheSubmittedFormsController {
 				e.getStackTrace();
 			}
 		}
-		String department = request.getParameter("Department");
+		department = request.getParameter("department");
 
-		String place_of_residence = request.getParameter("Place Of Residence");
-		String place_of_living = request.getParameter("Place Of Studying"); // place of studying
-		String annual_family_income = request.getParameter("Annual Income"); // annualIncome. financial_data
+		place_of_residence = request.getParameter("placeOfResidence");
 
-		String string_number_of_siblings_studying = request.getParameter("Sibling's Studying");
-		int int_number_of_siblings_studying = 0;
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
 		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
 			int_number_of_siblings_studying = -1; // in case of error
 		} else {
@@ -109,12 +133,12 @@ public class EmployeeShowTheSubmittedFormsController {
 			}
 		}
 
-		String family_state = request.getParameter("Family Status");
+		family_state = request.getParameter("familyStatus");
 
-		String string_number_of_unemployed_parents = request.getParameter("Unemployed Parents");
-		int int_number_of_unemployed_parents = 0;
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+
 		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
-			int_number_of_unemployed_parents = -1; // 500 means that the id does not exist or was not retrieved
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
 		} else {
 			try {
 				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
@@ -122,40 +146,277 @@ public class EmployeeShowTheSubmittedFormsController {
 				e.getStackTrace();
 			}
 		}
+		System.out.println("The department is " + department);
 
 		// first save the submitted form into the declined table and then delete it from
 		// the submitted forms table and finally find the rest submitted forms
+		// points are being calculated into the method save row in accepted table
+		if (department == null) {// if form is found
+			JOptionPane.showMessageDialog(null, "No form was found");
+		} else if (department.equals("Nutrition")) {
+			diat_DAO.save_in_declinedforms_diat(fname, lname, email, int_phone_number, place_of_residence,
+					place_of_living, department, int_year_of_attendance, family_state, int_number_of_siblings_studying,
+					annual_family_income, int_number_of_unemployed_parents);
 
-			if (department.equals("Nutrition")) {
-				diat_DAO.save_in_declinedforms_diat(fname, lname, email, int_phone_number, place_of_residence,
-						place_of_living, department, int_year_of_attendance, family_state,
-						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
+			diat_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
+																// in
+																// database
+		}
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat";
+	}
 
-				diat_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
-																					// in
-																					// database
-				System.out.println("quer");
-				show_the_submitted_forms_diat_query(model);
-				System.out.println("2");
-			} else if (department.equals("Geography")) {
-				geo_DAO.save_in_declinedforms_geo(fname, lname, email, int_phone_number, place_of_residence,
-						place_of_living, department, int_year_of_attendance, family_state,
-						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/decline", method = RequestMethod.POST)
+	public String declineASubmittedFormGeo(HttpServletRequest request, Model model) {
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
 
-				geo_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
-																					// in
-																					// database
-				show_the_submitted_forms_geo_query(model);
-			} else if (department.equals("Economics")) {
-				oik_DAO.save_in_declinedforms_oik(fname, lname, email, int_phone_number, place_of_residence,
-						place_of_living, department, int_year_of_attendance, family_state,
-						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
 
-				oik_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
-																					// in
-																					// database
-				show_the_submitted_forms_oik_query(model);
-		 	} else if (department.equals("Informatics")) {
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
+		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
+			int_year_of_attendance = -1; // in case of error
+		} else {
+			try {
+				int_year_of_attendance = Integer.parseInt(string_year_of_attendance);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
+
+		if (string_phone_number == null || string_phone_number.length() == 0) {
+			int_phone_number = -1; // in case of error
+		} else {
+			try {
+				int_phone_number = Integer.parseInt(string_phone_number);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		department = request.getParameter("department");
+
+		place_of_residence = request.getParameter("placeOfResidence");
+
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
+		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
+			int_number_of_siblings_studying = -1; // in case of error
+		} else {
+			try {
+				int_number_of_siblings_studying = Integer.parseInt(string_number_of_siblings_studying);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		family_state = request.getParameter("familyStatus");
+
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+
+		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
+		} else {
+			try {
+				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		System.out.println("The department is " + department);
+
+// first save the submitted form into the declined table and then delete it from
+// the submitted forms table and finally find the rest submitted forms
+// points are being calculated into the method save row in accepted table
+		if (department == null) {// if form is found
+			JOptionPane.showMessageDialog(null, "No form was found");
+		} else if (department.equals("Geography")) {
+			geo_DAO.save_in_declinedforms_geo(fname, lname, email, int_phone_number, place_of_residence,
+					place_of_living, department, int_year_of_attendance, family_state, int_number_of_siblings_studying,
+					annual_family_income, int_number_of_unemployed_parents);
+
+			geo_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
+// in
+// database
+
+		}
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo";
+	}
+
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/decline", method = RequestMethod.POST)
+	public String declineASubmittedFormOik(HttpServletRequest request, Model model) {
+
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
+
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
+
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
+		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
+			int_year_of_attendance = -1; // in case of error
+		} else {
+			try {
+				int_year_of_attendance = Integer.parseInt(string_year_of_attendance);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
+
+		if (string_phone_number == null || string_phone_number.length() == 0) {
+			int_phone_number = -1; // in case of error
+		} else {
+			try {
+				int_phone_number = Integer.parseInt(string_phone_number);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		department = request.getParameter("department");
+
+		place_of_residence = request.getParameter("placeOfResidence");
+
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
+		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
+			int_number_of_siblings_studying = -1; // in case of error
+		} else {
+			try {
+				int_number_of_siblings_studying = Integer.parseInt(string_number_of_siblings_studying);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		family_state = request.getParameter("familyStatus");
+
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+
+		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
+		} else {
+			try {
+				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		System.out.println("The department is " + department);
+
+// first save the submitted form into the declined table and then delete it from
+// the submitted forms table and finally find the rest submitted forms
+// points are being calculated into the method save row in accepted table
+		if (department == null) {// if form is found
+			JOptionPane.showMessageDialog(null, "No form was found");
+		} else if (department.equals("Economics")) {
+			oik_DAO.save_in_declinedforms_oik(fname, lname, email, int_phone_number, place_of_residence,
+					place_of_living, department, int_year_of_attendance, family_state, int_number_of_siblings_studying,
+					annual_family_income, int_number_of_unemployed_parents);
+
+			oik_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
+			// in
+			// database
+		}else {
+			JOptionPane.showMessageDialog(null, "No suitbale department");
+		}
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik";
+	}
+	
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/decline" , method = RequestMethod.POST) 
+	public String declineASubmittedForm(HttpServletRequest request, Model model) {
+
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
+
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
+
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
+		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
+			int_year_of_attendance = -1; // in case of error
+		} else {
+			try {
+				int_year_of_attendance = Integer.parseInt(string_year_of_attendance);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
+
+		if (string_phone_number == null || string_phone_number.length() == 0) {
+			int_phone_number = -1; // in case of error
+		} else {
+			try {
+				int_phone_number = Integer.parseInt(string_phone_number);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		department = request.getParameter("department");
+
+		place_of_residence = request.getParameter("placeOfResidence");
+
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
+		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
+			int_number_of_siblings_studying = -1; // in case of error
+		} else {
+			try {
+				int_number_of_siblings_studying = Integer.parseInt(string_number_of_siblings_studying);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		family_state = request.getParameter("familyStatus");
+
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+
+		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
+		} else {
+			try {
+				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		// first save the submitted form into the declined table and then delete it from
+		// the submitted forms table and finally find the rest submitted forms
+		if (department == null) { 
+			JOptionPane.showMessageDialog(null, "No form was found");
+		} else if (department.equals("Informatics")) {
 				plir_DAO.save_in_declinedforms_plir(fname, lname, email, int_phone_number, place_of_residence,
 						place_of_living, department, int_year_of_attendance, family_state,
 						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
@@ -163,22 +424,22 @@ public class EmployeeShowTheSubmittedFormsController {
 				plir_DAO.delete_a_row_from_subform_table(username); // query to find the submitted forms
 																					// in
 																					// database
-				show_the_submitted_forms_plir_query(model);
- 		}else { JOptionPane.showMessageDialog(null, "No form was found");}
-		return "redirect:/employee-show-the-submitted-forms";
-	//	return  showTheSubmittedFormsDiat(model);
-		 // redirect
+ 		}
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir";
 	}
 
-	@RequestMapping(value = {"/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/accept", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/accept", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/accept", "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/accept"}, method = RequestMethod.GET)
-	public String AcceptASubmittedForm(HttpServletRequest request, Model model) {
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/accept", method = RequestMethod.POST)
+	public String AcceptASubmittedFormDiat(HttpServletRequest request, Model model) {
 
-		String username = request.getParameter("Username");
-		String fname = request.getParameter("First Name");
-		String lname = request.getParameter("Last Name");
-		String string_year_of_attendance = request.getParameter("Year Of Attendance");
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
 
-		int int_year_of_attendance = 0;
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
+
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
 
 		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
 			int_year_of_attendance = -1; // in case of error
@@ -189,9 +450,10 @@ public class EmployeeShowTheSubmittedFormsController {
 				e.getStackTrace();
 			}
 		}
-		String email = request.getParameter("Email");
-		String string_phone_number = request.getParameter("PhoneNumber");
-		int int_phone_number = 0;
+
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
 
 		if (string_phone_number == null || string_phone_number.length() == 0) {
 			int_phone_number = -1; // in case of error
@@ -202,13 +464,15 @@ public class EmployeeShowTheSubmittedFormsController {
 				e.getStackTrace();
 			}
 		}
-		String department = request.getParameter("Department");
+		department = request.getParameter("department");
 
-		String place_of_residence = request.getParameter("Place Of Residence");
-		String place_of_living = request.getParameter("Place Of Studying"); // place of studying
-		String annual_family_income = request.getParameter("Annual Income"); // annualIncome. financial_data
-		String string_number_of_siblings_studying = request.getParameter("Sibling's Studying");
-		int int_number_of_siblings_studying = 0;
+		place_of_residence = request.getParameter("placeOfResidence");
+
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
 
 		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
 			int_number_of_siblings_studying = -1; // in case of error
@@ -219,13 +483,13 @@ public class EmployeeShowTheSubmittedFormsController {
 				e.getStackTrace();
 			}
 		}
-		String family_state = request.getParameter("Family Status");
 
-		String string_number_of_unemployed_parents = request.getParameter("Unemployed Parents");
-		int int_number_of_unemployed_parents = 0;
+		family_state = request.getParameter("familyStatus");
+
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
 
 		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
-			int_number_of_unemployed_parents = -1; // 500 means that the id does not exist or was not retrieved
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
 		} else {
 			try {
 				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
@@ -233,52 +497,291 @@ public class EmployeeShowTheSubmittedFormsController {
 				e.getStackTrace();
 			}
 		}
+		System.out.println("The department is " + department);
 
-		if (username != null) {  //if form is found
-
-			// points are being calculated into the method save row in accepted table
-			if (department.equals("Nutrition")) { // first save the accepted form into the table, then delete it from
-													// the
-													// submitted forms table and finally find the rest submitted forms
-				diat_DAO.save_a_row_in_table_acceptedforms_diatS(fname, lname, email, int_phone_number,
-						place_of_residence, place_of_living, department, int_year_of_attendance, family_state,
-						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				diat_DAO.delete_a_row_from_subform_table(username);
-
-				show_the_submitted_forms_diat_query(model); // query to find the submitted forms in database
-			} else if (department.equals("Geography")) {
-				geo_DAO.save_a_row_in_table_acceptedforms_geo(fname, lname, email, int_phone_number, place_of_residence,
-						place_of_living, department, int_year_of_attendance, family_state,
-						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				geo_DAO.delete_a_row_from_subform_table(username);
-
-				show_the_submitted_forms_geo_query(model); // query to find the submitted forms in database
-			} else if (department.equals("Economics")) {
-				oik_DAO.save_a_row_in_table_acceptedforms_oik(fname, lname, email, int_phone_number, place_of_residence,
-						place_of_living, department, int_year_of_attendance, family_state,
-						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				oik_DAO.delete_a_row_from_subform_table(username);
-
-				show_the_submitted_forms_oik_query(model);// query to find the submitted forms in database
-			} else if (department.equals("Informatics")) {
-				plir_DAO.save_a_row_in_table_acceptedforms_plir(fname, lname, email, int_phone_number,
-						place_of_residence, place_of_living, department, int_year_of_attendance, family_state,
-						int_number_of_siblings_studying, annual_family_income, int_number_of_unemployed_parents);
-				plir_DAO.delete_a_row_from_subform_table(username);
-
-				show_the_submitted_forms_plir_query(model); // query to find the submitted forms in database
-			}
-		}else {JOptionPane.showMessageDialog(null, "No form was found");
+		// points are being calculated into the method save row in accepted table
+		if (department == null) {// if form is found
+			JOptionPane.showMessageDialog(null, "No form was found");
 		}
-		return "employee-show-the-submitted-forms";
+		if (department.equals("Nutrition")) { // first save the accepted form into the table, then delete it from
+												// the
+												// submitted forms table and finally find the rest submitted forms
+			diat_DAO.save_a_row_in_table_acceptedforms_diatS(fname, lname, email, int_phone_number, place_of_residence,
+					place_of_living, department, int_year_of_attendance, family_state, int_number_of_siblings_studying,
+					annual_family_income, int_number_of_unemployed_parents);
+			diat_DAO.delete_a_row_from_subform_table(username);
+		}
+		// redirect to this page => show again all the submitted forms that exist in the
+		// database table for this department
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat";
 	}
 
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/accept", method = RequestMethod.POST)
+	public String AcceptASubmittedFormGeo(HttpServletRequest request, Model model) {
+
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
+
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
+
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
+		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
+			int_year_of_attendance = -1; // in case of error
+		} else {
+			try {
+				int_year_of_attendance = Integer.parseInt(string_year_of_attendance);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
+
+		if (string_phone_number == null || string_phone_number.length() == 0) {
+			int_phone_number = -1; // in case of error
+		} else {
+			try {
+				int_phone_number = Integer.parseInt(string_phone_number);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		department = request.getParameter("department");
+
+		place_of_residence = request.getParameter("placeOfResidence");
+
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
+		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
+			int_number_of_siblings_studying = -1; // in case of error
+		} else {
+			try {
+				int_number_of_siblings_studying = Integer.parseInt(string_number_of_siblings_studying);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		family_state = request.getParameter("familyStatus");
+
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+
+		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
+		} else {
+			try {
+				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		System.out.println("The department is " + department);
+
+		// points are being calculated into the method save row in accepted table
+		if (department == null) {// if form is found
+			JOptionPane.showMessageDialog(null, "No form was found");
+		} else if (department.equals("Geography")) {
+			geo_DAO.save_a_row_in_table_acceptedforms_geo(fname, lname, email, int_phone_number, place_of_residence,
+					place_of_living, department, int_year_of_attendance, family_state, int_number_of_siblings_studying,
+					annual_family_income, int_number_of_unemployed_parents);
+			geo_DAO.delete_a_row_from_subform_table(username);
+		}
+		// redirect to this page => show again all the submitted forms that exist in the
+		// database table for this department
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo";
+
+	}
+
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/accept", method = RequestMethod.POST)
+	public String AcceptASubmittedFormOik(HttpServletRequest request, Model model) {
+
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
+
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
+
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
+		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
+			int_year_of_attendance = -1; // in case of error
+		} else {
+			try {
+				int_year_of_attendance = Integer.parseInt(string_year_of_attendance);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
+
+		if (string_phone_number == null || string_phone_number.length() == 0) {
+			int_phone_number = -1; // in case of error
+		} else {
+			try {
+				int_phone_number = Integer.parseInt(string_phone_number);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		department = request.getParameter("department");
+
+		place_of_residence = request.getParameter("placeOfResidence");
+
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
+		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
+			int_number_of_siblings_studying = -1; // in case of error
+		} else {
+			try {
+				int_number_of_siblings_studying = Integer.parseInt(string_number_of_siblings_studying);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		family_state = request.getParameter("familyStatus");
+
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+
+		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
+		} else {
+			try {
+				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		System.out.println("The department is " + department);
+
+		// points are being calculated into the method save row in accepted table
+		if (department == null) {// if form is found
+			JOptionPane.showMessageDialog(null, "No form was found");
+		} else if (department.equals("Economics")) {
+			oik_DAO.save_a_row_in_table_acceptedforms_oik(fname, lname, email, int_phone_number, place_of_residence,
+					place_of_living, department, int_year_of_attendance, family_state, int_number_of_siblings_studying,
+					annual_family_income, int_number_of_unemployed_parents);
+			oik_DAO.delete_a_row_from_subform_table(username);
+		}
+
+		// redirect to this page => show again all the submitted forms that exist in the
+		// database table for this department
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik";
+	}
+
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/accept", method = RequestMethod.POST)
+	public String AcceptASubmittedFormPlir(HttpServletRequest request, Model model) {
+		username = request.getParameter("username");
+		System.out.println("The username is " + username);
+
+		fname = request.getParameter("fname");
+		System.out.println("The first name is " + fname);
+
+		lname = request.getParameter("lname");
+
+		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
+		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
+			int_year_of_attendance = -1; // in case of error
+		} else {
+			try {
+				int_year_of_attendance = Integer.parseInt(string_year_of_attendance);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		email = request.getParameter("email");
+
+		string_phone_number = request.getParameter("phoneNumber");
+
+		if (string_phone_number == null || string_phone_number.length() == 0) {
+			int_phone_number = -1; // in case of error
+		} else {
+			try {
+				int_phone_number = Integer.parseInt(string_phone_number);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		department = request.getParameter("department");
+
+		place_of_residence = request.getParameter("placeOfResidence");
+
+		place_of_living = request.getParameter("placefStudying"); // place of studying
+
+		annual_family_income = request.getParameter("annualIncome"); // annualIncome. financial_data
+
+		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
+		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
+			int_number_of_siblings_studying = -1; // in case of error
+		} else {
+			try {
+				int_number_of_siblings_studying = Integer.parseInt(string_number_of_siblings_studying);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+
+		family_state = request.getParameter("familyStatus");
+
+		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+
+		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
+			int_number_of_unemployed_parents = -1; // -1 means that the id does not exist or was not retrieved
+		} else {
+			try {
+				int_number_of_unemployed_parents = Integer.parseInt(string_number_of_unemployed_parents);
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		}
+		System.out.println("The department is " + department);
+
+		// points are being calculated into the method save row in accepted table
+		if (department == null) {// if form is found
+			JOptionPane.showMessageDialog(null, "No form was found");
+		} else if (department.equals("Informatics")) {
+			plir_DAO.save_a_row_in_table_acceptedforms_plir(fname, lname, email, int_phone_number, place_of_residence,
+					place_of_living, department, int_year_of_attendance, family_state, int_number_of_siblings_studying,
+					annual_family_income, int_number_of_unemployed_parents);
+			plir_DAO.delete_a_row_from_subform_table(username);
+		}
+
+		// redirect to this page => show again all the submitted forms that exist in the
+		// database table for this department
+		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir";
+
+	}
+
+	// RETRIEVING THE SUBMITTED FORMS FROM THE DATABASE
 	protected void show_the_submitted_forms_diat_query(Model model) {
+		List<SubmittedForm_Diat> arraylist_subforms_diat = new ArrayList<SubmittedForm_Diat>();
 		try {
-			List<SubmittedForm_Diat> arraylist_subforms_diat = diat_DAO.get_the_submitted_forms_diat(); // get all
-																										// submitted
-																										// forms from
-																										// DAO
+			arraylist_subforms_diat = diat_DAO.get_the_submitted_forms_diat(); // get all
+																				// submitted
+																				// forms from
+																				// DAO
 			model.addAttribute("arraylist_subforms", arraylist_subforms_diat); // add all forms to the model
 		} catch (Exception e) {
 			e.getStackTrace();
