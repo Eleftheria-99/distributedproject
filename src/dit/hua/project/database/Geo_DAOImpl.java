@@ -328,7 +328,7 @@ public class Geo_DAOImpl implements Geo_DAO {
 			}
 
 			// points from place of studying
-			if (!form.getPlaceOfStudying().equals(form.getPlaceOfResidence())) {
+			if (form.getPlaceOfStudying() != form.getPlaceOfResidence()) {
 				countpoints += 50;
 			}
 		}

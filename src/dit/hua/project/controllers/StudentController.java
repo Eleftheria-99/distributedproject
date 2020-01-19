@@ -22,10 +22,7 @@ public class StudentController {
 	@Autowired
 	private Student_DAO studentDAO;
 
-//	@RequestMapping(value = "/login/main-menu-for-all/student-login", method = RequestMethod.GET)
-//	public String showStudentLogIn() {
-//		return "show-student-login";
-//	}
+
 
 	@RequestMapping(value = "login/main-menu-for-all/student-menu/showForm", method = RequestMethod.GET)
 	protected String fillForm() {

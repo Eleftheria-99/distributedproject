@@ -16,12 +16,13 @@ public class Authorities {
 	@Column(name = "ID")
 	private int id;
 	
+     //annotation for foreign key  in users.java
+//	@Column(name = "USERNAME")
+//	private String username;
+
 	@Column(name = "AUTHORITY")
 	private String authority;
 
-//	@ManyToOne                                         //annotation for foreign key  in users.java
-//	@JoinColumn(name = "USERNAME")
-//	private Users username;
 	
 	public Authorities() {  //empty default constructor
 	
@@ -43,13 +44,13 @@ public class Authorities {
 		this.id = id;
 	}
 
-//	public Users getUsername() {
-//		return username;
-//	}
-//
-//	public void setUsername(Users username) {
-//		this.username = username;
-//	}
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 }
 

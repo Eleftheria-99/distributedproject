@@ -335,7 +335,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 			}
 
 			// points from place of studying
-			if (!form.getPlaceOfStudying().equals(form.getPlaceOfResidence())) {
+			if (form.getPlaceOfStudying() != form.getPlaceOfResidence()) {
 				countpoints += 50;
 			}
 		}

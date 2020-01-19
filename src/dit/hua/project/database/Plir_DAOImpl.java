@@ -339,7 +339,7 @@ public class Plir_DAOImpl implements Plir_DAO {
 			}
 
 			// points from place of studying
-			if (!form.getPlaceOfStudying().equals(form.getPlaceOfResidence())) {
+			if (form.getPlaceOfStudying() != form.getPlaceOfResidence()) {
 				countpoints += 50;
 			}
 		}
