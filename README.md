@@ -1,6 +1,4 @@
 # distributedproject
-3rd-phase
-
 
 Distributed Systems project readme file 
 
