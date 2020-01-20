@@ -15,6 +15,9 @@
 	</pre>
 	<sec:authorize access="isAuthenticated()">
 		<div class="ui segment">
+		<pre>
+	                     	                                                                                                                  <a href="/DistributedSystems/just-logged-out">Logout</a>
+	</pre>
 			User:
 			<sec:authentication property="principal.username" />
 			, Role:

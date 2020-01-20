@@ -16,16 +16,25 @@ public class Authorities {
 	@Column(name = "ID")
 	private int id;
 	
-     //annotation for foreign key  in users.java
-//	@Column(name = "USERNAME")
-//	private String username;
-
+	
+    //annotation for foreign key  in users.java
+	@Column(name = "USERNAME")
+	private String username;
+	
 	@Column(name = "AUTHORITY")
 	private String authority;
 
 	
 	public Authorities() {  //empty default constructor
 	
+	}
+	
+	
+	public Authorities(int id, String authority, String username) {  //constructor
+		super();
+		this.id = id;
+		this.authority = authority;
+		this.username = username;
 	}
 
 	public String getAuthority() {

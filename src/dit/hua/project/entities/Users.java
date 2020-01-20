@@ -1,5 +1,6 @@
 package dit.hua.project.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,8 +28,7 @@ public class Users {
 
 	// TABLE:AUTHORITIES: USERNAME : FK -> TABLE:USERS:USERNAME
 	// mapping: one to one //instead of manual join
-	//@OneToOne(fetch=FetchType.EAGER, cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-	@OneToOne(fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name = "USERNAME") // field of table: AUTHORITIES
 	private Authorities authorities;
 

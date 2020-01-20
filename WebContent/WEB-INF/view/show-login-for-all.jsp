@@ -18,14 +18,14 @@
 	<br />
 	<br />
 	<!-- to action antistoixei sto mapping tou servlet  method="post"         /DistributedSystems/employee-login/employee-menu   -->
-	${error } ${log_out_message} ${users}
+	${error} ${log_out_message} ${users}
 	<br />
 	<c:if test="${param.error != null}">
 		<i>Sorry! Invalid username/password!</i>
-	</c:if>
+	</c:if>       
 	<div id=" login for all in order to see the menu">
-		<form:form method="POST"
-			action="/DistributedSystems/login/main-menu-for-all">         
+		<form:form  action="/DistributedSystems/login/main-menu-for-all"   method="POST"> 
+		
 	Username : <input name="username" id="username" type="text" required />
 			<br />
 	Password: <input name="password" id="password" type="password" required />
