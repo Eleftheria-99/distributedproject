@@ -16,7 +16,7 @@ public class Final_Ranking_Plir implements Serializable{
 	@Id                       //primary key 
 	@Column(name = "ID")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
-	protected String id;
+	protected int id;
 	
 	@Column(name = "FNAME")
 	protected String fname;
@@ -27,7 +27,12 @@ public class Final_Ranking_Plir implements Serializable{
 	@Column(name = "POINTS")
 	protected int points;
 	
-	Final_Ranking_Plir(){}
+	
+	public Final_Ranking_Plir() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public Final_Ranking_Plir(String fname, String lname, int  points) {
 		super();
 		this.fname = fname;
@@ -40,11 +45,11 @@ public class Final_Ranking_Plir implements Serializable{
 		return "Final_Ranking_Plir [id=" + id + ", fname=" + fname + ", lname=" + lname + ", points=" + points + "]";
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

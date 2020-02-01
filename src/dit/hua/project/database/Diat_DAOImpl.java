@@ -1,9 +1,8 @@
 package dit.hua.project.database;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
-import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,13 +17,13 @@ import dit.hua.project.entities.Final_Ranking_Diat;
 
 @Repository // the component that declares that exists communication with database
 public class Diat_DAOImpl implements Diat_DAO {
+	//@Transactional in service layer
 
 	// inject the session factory
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	@Override
-	@Transactional // because it has to do with the database
 	public List<SubmittedForm_Diat> get_the_submitted_forms_diat() {
 		// returns the table submforms_diat, returns all the submitted forms from the
 		// department of dietology / nutrition, that have been saved into the database
@@ -58,7 +57,6 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public SubmittedForm_Diat return_Submitted_Form_Diat(String username) { // return 1 submitted form based on the
 																			// username
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
@@ -76,7 +74,6 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public List<AcceptedForms_Diat> get_the_accepted_forms_diat() {
 		// returns the table acceptedforms_diat, returns all the submitted forms from
 		// the department of dietology
@@ -104,7 +101,6 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void save_in_declinedforms_diat(String fname, String lname, String email, int phone_number,
 			String place_of_residence, String place_of_living, String department, int year_of_attendance,
 			String family_state, int number_of_siblings_studying, String annual_family_income,
@@ -141,7 +137,6 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void save_a_row_in_table_acceptedforms_diatS(String fname, String lname, String email, int phone_number,
 			String place_of_residence, String place_of_living, String department, int year_of_attendance,
 			String family_state, int number_of_siblings_studying, String annual_family_income,
@@ -179,7 +174,6 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public ArrayList<AcceptedForms_Diat> check_if_inserted_row_exists(String given_id) {
 
 		// to check if the inserted row exists! //String given_id_ = retrieve from db ;
@@ -224,7 +218,6 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void delete_a_row_from_subform_table(String username) {
 		// int id_of_the_submitted_form, String table_name, String entity_class_name
 		// for this class ! +id needed
@@ -257,14 +250,12 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public ArrayList<AcceptedForms_Diat> get_the_accepted_forms_order_by_desc_and_until_limit_diat(
 			int limit_of_students_entitled_to_free_meals) {
 		// returns the table acceptedforms_diat order by asc and only the students
 		// entitled to free meals
 
-		String create_search_query = "from AcceptedForms_Diat order by points desc limit"
-				+ limit_of_students_entitled_to_free_meals; // ++++++
+		String create_search_query = "from AcceptedForms_Diat order by points desc";
 		System.out.println("query: " + create_search_query);
 
 		List<AcceptedForms_Diat> all_acceptedForms_Diat = new ArrayList<>();
@@ -274,9 +265,9 @@ public class Diat_DAOImpl implements Diat_DAO {
 
 		try {
 			// create a query
-
 			Query<AcceptedForms_Diat> query = currentSession.createQuery(create_search_query, AcceptedForms_Diat.class);
-
+			 // this replaces the LIMIT in the query
+			query.setMaxResults(limit_of_students_entitled_to_free_meals);
 			// execute the query and get the results list
 			all_acceptedForms_Diat = query.getResultList();
 
@@ -296,7 +287,6 @@ public class Diat_DAOImpl implements Diat_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void save_a_row_in_table_final_ranking_diat(Final_Ranking_Diat final_ranking) {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
@@ -342,5 +332,32 @@ public class Diat_DAOImpl implements Diat_DAO {
 		// acceptedform.setPoints(Integer.toString(countpoints));
 		System.out.println("final points :" + countpoints);
 		return countpoints;
+	}
+
+	@Override
+	public long count_number_of_students_from_table_user_dep_diat(String department) {
+		String create_search_query = "select count(*) from Users where department='"+ department+"'"; //group by department"; 
+		System.out.println("query: " + create_search_query);
+		long number_of_students = 0;
+     
+//		// get current hibernate session
+		Session currentSession = sessionFactory.getCurrentSession();
+		try {
+			// query	
+		  Query query = currentSession.createQuery(create_search_query );
+		    
+		  for(Iterator it=query.iterate();it.hasNext();)
+		  {
+			  number_of_students = (Long) it.next();
+		   System.out.print("Count: " + number_of_students);
+		  }
+		  
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		
+		return number_of_students; // return the result!
 	}
 }

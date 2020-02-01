@@ -36,5 +36,7 @@ public interface Diat_DAO {
 	public int calculatePoints(SubmittedForm_Diat form);    //calculate points based on the submitted form
 
 	public SubmittedForm_Diat return_Submitted_Form_Diat(String username) ;   //return 1 submitted form based on the username
+	
+	public long count_number_of_students_from_table_user_dep_diat(String department);  //counts the number of students from the table whose department  is Nutrition
 
 }

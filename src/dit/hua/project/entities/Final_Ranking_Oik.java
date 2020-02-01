@@ -16,35 +16,39 @@ public class Final_Ranking_Oik implements Serializable{
 	@Id                       //primary key 
 	@Column(name = "ID")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
-	protected String id;
+	private int id;
 	
 	@Column(name = "FNAME")
-	protected String fname;
+	private String fname;
 	
 	@Column(name = "LNAME")
-	protected String lname;
+	private String lname;
 
 	@Column(name = "POINTS")
-	protected int points;
+	private int points;
 	
-	Final_Ranking_Oik(){}
+	public Final_Ranking_Oik(){
+		super();
+	}
+	
 	public Final_Ranking_Oik(String fname, String lname, int points) {
 		super();
 		this.fname = fname;
 		this.lname = lname;
 		this.points = points;
 	}
+	
 
 	@Override
 	public String toString() {
 		return "Final_Ranking_Oik [id=" + id + ", fname=" + fname + ", lname=" + lname + ", points=" + points + "]";
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

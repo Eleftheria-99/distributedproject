@@ -36,4 +36,6 @@ public interface Oik_DAO {
 
 	public SubmittedForm_Oik return_Submitted_Form_Oik(String username) ;   //return 1 submitted form based on the username
 	
+	public long count_number_of_students_from_table_user_dep_oik(String department);  //counts the number of students from the table whose department  is Economics
+
 }

@@ -18,7 +18,7 @@ public class Final_Ranking_Diat implements Serializable{
 	@Id                       //primary key 
 	@Column(name = "ID")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
-	protected String id;
+	protected int id;
 	
 	@Column(name = "FNAME")
 	protected String fname;
@@ -29,7 +29,12 @@ public class Final_Ranking_Diat implements Serializable{
 	@Column(name = "POINTS")
 	protected int points;
 	
-	public Final_Ranking_Diat() {}
+	
+	public Final_Ranking_Diat() {
+		super();
+		
+	}
+
 	public Final_Ranking_Diat(String fname, String lname, int points) {
 		super();
 		this.fname = fname;
@@ -42,11 +47,11 @@ public class Final_Ranking_Diat implements Serializable{
 		return "Final_Ranking_Diat [id=" + id + ", fname=" + fname + ", lname=" + lname + ", points=" + points + "]";
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

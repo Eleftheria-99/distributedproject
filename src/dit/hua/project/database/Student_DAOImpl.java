@@ -1,17 +1,19 @@
 package dit.hua.project.database;
 
 import java.util.ArrayList;
-
-import javax.transaction.Transactional;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 
-import dit.hua.project.entities.AcceptedForm_Oik;
-import dit.hua.project.entities.DeclinedForm_Oik;
+import dit.hua.project.entities.Final_Ranking_Diat;
+import dit.hua.project.entities.Final_Ranking_Geo;
+import dit.hua.project.entities.Final_Ranking_Oik;
+import dit.hua.project.entities.Final_Ranking_Plir;
 import dit.hua.project.entities.SubmittedForm_Diat;
 import dit.hua.project.entities.SubmittedForm_Geo;
 import dit.hua.project.entities.SubmittedForm_Oik;
@@ -25,8 +27,9 @@ public class Student_DAOImpl implements Student_DAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	
+	//find student's department
 	@Override
-	@Transactional
 	public String findwhichDepartment(String username) {
 
 		Users user = new Users();
@@ -45,9 +48,10 @@ public class Student_DAOImpl implements Student_DAO {
 		}
 		return department;
 	}
+	
+	//INSERT TO DB
 
 	@Override
-	@Transactional
 	public ArrayList<SubmittedForm_Oik> insert_form_oik(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
@@ -81,7 +85,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public ArrayList<SubmittedForm_Plir> insert_form_plir(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
@@ -108,7 +111,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public ArrayList<SubmittedForm_Diat> insert_form_diat(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
@@ -138,7 +140,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public ArrayList<SubmittedForm_Geo> insert_form_geo(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
@@ -166,8 +167,9 @@ public class Student_DAOImpl implements Student_DAO {
 		return null;
 	}
 
+	//CHANGE DATA
+	
 	@Override
-	@Transactional
 	public void change_form_oik(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
@@ -194,7 +196,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public void change_form_plir(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
@@ -220,7 +221,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public void change_form_diat(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
@@ -243,7 +243,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public void change_form_geo(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Geo form = new SubmittedForm_Geo();
@@ -263,9 +262,10 @@ public class Student_DAOImpl implements Student_DAO {
 		}
 		// return form;
 	}
+	
+	//CHECK IF SUBMITTED FORM DOEN'T EXIST
 
 	@Override
-	@Transactional
 	public boolean if_form_NOT_exists_Oik(String username) {
 
 		try {
@@ -288,7 +288,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public boolean if_form_NOT_exists_Plir(String username) {
 
 		try {
@@ -312,7 +311,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public boolean if_form_NOT_exists_Diat(String username) {
 
 		try {
@@ -334,7 +332,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public boolean if_form_NOT_exists_Geo(String username) {
 
 		try {
@@ -355,8 +352,9 @@ public class Student_DAOImpl implements Student_DAO {
 		}
 	}
 
+	//RETURN FORM
+	
 	@Override
-	@Transactional
 	public void returnStudentForm_Oik(String username, Model model, String error) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
@@ -386,7 +384,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public void returnStudentForm_Plir(String username, Model model, String error) {
 
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
@@ -419,7 +416,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public void returnStudentForm_Diat(String username, Model model, String error) {
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
 		try {
@@ -448,7 +444,6 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
-	@Transactional
 	public void returnStudentForm_Geo(String username, Model model, String error) {
 		SubmittedForm_Geo form = new SubmittedForm_Geo();
 		try {
@@ -476,49 +471,359 @@ public class Student_DAOImpl implements Student_DAO {
 		model.addAttribute("parents", form.getUnemployedParents());
 	}
 
+	//SEE RESULTS
+	
+	//ECONOMICS
 	@Override
-	@Transactional
-	public void showPoints_oik(String username, Model model) {
+	public String returnFname_oik(String username) {
 
-		AcceptedForm_Oik acceptedform = new AcceptedForm_Oik();
-		DeclinedForm_Oik declinedform = new DeclinedForm_Oik();
-		// Final_Ranking_Oik ranking = new Final_Ranking_Oik();
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
+		String fname = "";
 		try {
 
 			Session currentSession = sessionFactory.getCurrentSession();
-			form = currentSession.get(SubmittedForm_Oik.class, username);
-			String fname = form.getFname();
-			// if form is declined
-			for (int id = 1; id <= 40; id++) {
-				declinedform = currentSession.get(DeclinedForm_Oik.class, id);
-				acceptedform = currentSession.get(AcceptedForm_Oik.class, id);
-				
-				if (declinedform.getFname().equals(fname)) {
-					model.addAttribute("declined", "Unfortunately your form was declined!");
-					model.addAttribute("errormessage","");
-					break;
-					
-				} else if (acceptedform.getFname().equals(fname)) {
-					model.addAttribute("points", acceptedform.getPoints());
-					model.addAttribute("errormessage","");
-					//model.addAttribute("rank", id);
-					break;
-				}else {
-					model.addAttribute("errormessage","Sorry, this is not available yet!");
-					
-				}
-			}
-			
-			
-		} catch (
 
-		Exception e) {
+			form = currentSession.get(SubmittedForm_Oik.class, username);
+			fname = form.getFname();
+
+			System.out.println("Submitted form is :"+form);
+		} catch (Exception e) {
 			e.getStackTrace();
 			e.getMessage();
 			e.getCause();
 		}
+		return fname;
 
 	}
+
+	@Override
+	public String returnLname_oik(String username) {
+
+		SubmittedForm_Oik form = new SubmittedForm_Oik();
+		String lname = "";
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+
+			form = currentSession.get(SubmittedForm_Oik.class, username);
+			lname = form.getLname();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return lname;
+	}
+
+	@Override
+	public ArrayList<Final_Ranking_Oik> returnFinalRanking_oik_ALL_students_entitled() {
+		String create_search_query = "from Final_Ranking_Oik"; // entity name
+		System.out.println("query: " + create_search_query);
+
+		List<Final_Ranking_Oik> all_finalranking_forms = new ArrayList<>();
+		// create session
+		Session curentSession = sessionFactory.getCurrentSession();
+		System.out.println("current session done ");
+		try {
+			System.out.println("begin try ");
+
+			// create query
+			Query<Final_Ranking_Oik> query = curentSession.createQuery(create_search_query, Final_Ranking_Oik.class); // query
+			System.out.println("query done");
+
+			// execute the query and get the results list
+			all_finalranking_forms = query.getResultList();
+			System.out.println("getting  list");
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		
+		
+		ArrayList<Final_Ranking_Oik> arraylist_final_ranking = new ArrayList<Final_Ranking_Oik>();
+
+		arraylist_final_ranking.addAll( all_finalranking_forms); // pass whatever the List has into the arraylist!
+
+		displayFormsOik(arraylist_final_ranking ); //print in the console the list that the database returned 
+		return arraylist_final_ranking; // return the results !
+	}
+
+	@Override
+	public void displayFormsOik(List<Final_Ranking_Oik> forms_list) {
+		System.out.println("display submitted forms from dietology found in database!");
+		// display students
+		for (Final_Ranking_Oik users : forms_list) {
+			System.out.println(users);
+		}
+
+		
+	}
+	
+	
+	//INFORMATICS
+	@Override
+	public String returnFname_plir(String username) {
+		
+		SubmittedForm_Plir form = new SubmittedForm_Plir();
+		String fname = "";
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+
+			form = currentSession.get(SubmittedForm_Plir.class, username);
+			fname = form.getFname();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return fname;
+	}
+
+	@Override
+	public String returnLname_plir(String username) {
+		
+		SubmittedForm_Plir form = new SubmittedForm_Plir();
+		String lname = "";
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+
+			form = currentSession.get(SubmittedForm_Plir.class, username);
+			lname = form.getLname();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return lname;
+	}
+	
+	@Override
+	public ArrayList<Final_Ranking_Plir> returnFinalRanking_plir_ALL_students_entitled() {
+		String create_search_query = "from Final_Ranking_Plir"; // entity name
+		System.out.println("query: " + create_search_query);
+
+		List<Final_Ranking_Plir> all_finalranking_forms = new ArrayList<>();
+		// create session
+		Session curentSession = sessionFactory.getCurrentSession();
+		System.out.println("current session done ");
+		try {
+			System.out.println("begin try ");
+
+			// create query
+			Query<Final_Ranking_Plir> query = curentSession.createQuery(create_search_query, Final_Ranking_Plir.class); // query
+			System.out.println("query done");
+
+			// execute the query and get the results list
+			all_finalranking_forms = query.getResultList();
+			System.out.println("getting  list");
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		
+		
+		ArrayList<Final_Ranking_Plir> arraylist_final_ranking = new ArrayList<Final_Ranking_Plir>();
+
+		arraylist_final_ranking.addAll( all_finalranking_forms); // pass whatever the List has into the arraylist!
+
+		displayFormsPlir(arraylist_final_ranking ); //print in the console the list that the database returned 
+		return arraylist_final_ranking; // return the results !
+	}
+
+	@Override
+	public void displayFormsPlir(List<Final_Ranking_Plir> forms_list) {
+		System.out.println("display submitted forms from dietology found in database!");
+		// display students
+		for (Final_Ranking_Plir users : forms_list) {
+			System.out.println(users);
+		}
+
+		
+	}
+	
+	//GEOGRAPHY
+	@Override
+	public String returnFname_geo(String username) {
+
+		SubmittedForm_Geo form = new SubmittedForm_Geo();
+		String fname = "";
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+
+			form = currentSession.get(SubmittedForm_Geo.class, username);
+			fname = form.getFname();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return fname;
+	}
+
+	@Override
+	public String returnLname_geo(String username) {
+		
+		SubmittedForm_Geo form = new SubmittedForm_Geo();
+		String lname = "";
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+
+			form = currentSession.get(SubmittedForm_Geo.class, username);
+			lname = form.getLname();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return lname;
+	}
+	
+	
+
+	@Override
+	public ArrayList<Final_Ranking_Geo> returnFinalRanking_geo_ALL_students_entitled() {
+		String create_search_query = "from Final_Ranking_Geo"; // entity name
+		System.out.println("query: " + create_search_query);
+
+		List<Final_Ranking_Geo> all_finalranking_forms = new ArrayList<>();
+		// create session
+		Session curentSession = sessionFactory.getCurrentSession();
+		System.out.println("current session done ");
+		try {
+			System.out.println("begin try ");
+
+			// create query
+			Query<Final_Ranking_Geo> query = curentSession.createQuery(create_search_query, Final_Ranking_Geo.class); // query
+			System.out.println("query done");
+
+			// execute the query and get the results list
+			all_finalranking_forms = query.getResultList();
+			System.out.println("getting  list");
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		
+		
+		ArrayList<Final_Ranking_Geo> arraylist_final_ranking = new ArrayList<Final_Ranking_Geo>();
+
+		arraylist_final_ranking.addAll( all_finalranking_forms); // pass whatever the List has into the arraylist!
+
+		displayFormsGeo(arraylist_final_ranking ); //print in the console the list that the database returned 
+		return arraylist_final_ranking; // return the results !
+	}
+
+	@Override
+	public void displayFormsGeo(List<Final_Ranking_Geo> forms_list) {
+		System.out.println("display submitted forms from dietology found in database!");
+		// display students
+		for (Final_Ranking_Geo users : forms_list) {
+			System.out.println(users);
+		}
+
+		
+	}
+	
+	//NUTRITION
+	@Override
+	public String returnFname_diat(String username) {
+		
+		SubmittedForm_Diat form = new SubmittedForm_Diat();
+		String fname = "";
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+
+			form = currentSession.get(SubmittedForm_Diat.class, username);
+			fname = form.getFname();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return fname;
+	}
+
+	@Override
+	public String returnLname_diat(String username) {
+		
+		SubmittedForm_Diat form = new SubmittedForm_Diat();
+		String lname = "";
+		try {
+
+			Session currentSession = sessionFactory.getCurrentSession();
+
+			form = currentSession.get(SubmittedForm_Diat.class, username);
+			lname = form.getLname();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return lname;
+	}
+		
+	@Override
+	public ArrayList<Final_Ranking_Diat> returnFinalRanking_diat_ALL_students_entitled() {
+		String create_search_query = "from Final_Ranking_Diat"; // entity name
+		System.out.println("query: " + create_search_query);
+
+		List<Final_Ranking_Diat> all_finalranking_forms = new ArrayList<>();
+		// create session
+		Session curentSession = sessionFactory.getCurrentSession();
+		System.out.println("current session done ");
+		try {
+			System.out.println("begin try ");
+
+			// create query
+			Query<Final_Ranking_Diat> query = curentSession.createQuery(create_search_query, Final_Ranking_Diat.class); // query
+			System.out.println("query done");
+
+			// execute the query and get the results list
+			all_finalranking_forms = query.getResultList();
+			System.out.println("getting  list");
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		
+		
+		ArrayList<Final_Ranking_Diat> arraylist_final_ranking = new ArrayList<Final_Ranking_Diat>();
+
+		arraylist_final_ranking.addAll( all_finalranking_forms); // pass whatever the List has into the arraylist!
+
+		displayFormsDiat(arraylist_final_ranking ); //print in the console the list that the database returned 
+		return arraylist_final_ranking; // return the results !
+	}
+	
+	@Override
+	public void displayFormsDiat(List<Final_Ranking_Diat> forms_list) {
+		System.out.println("display submitted forms from dietology found in database!");
+		// display students
+		for (Final_Ranking_Diat users : forms_list) {
+			System.out.println(users);
+		}
+
+	}
+
 
 }

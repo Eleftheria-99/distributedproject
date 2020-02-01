@@ -37,6 +37,9 @@ public interface Geo_DAO {
 	
 	
 	public SubmittedForm_Geo return_Submitted_Form_Geo(String username) ;   //return 1 submitted form based on the username
+	
+	public long count_number_of_students_from_table_user_dep_geo(String department);  //counts the number of students from the table whose department  is Geography
+
 
 
 }

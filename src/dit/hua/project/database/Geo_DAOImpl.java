@@ -1,6 +1,7 @@
 package dit.hua.project.database;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -25,7 +26,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	private SessionFactory sessionFactory;
 
 	@Override
-	@Transactional // because it has to do with the database
 	public List<SubmittedForm_Geo> get_the_submitted_forms_geo() {
 
 		String create_search_query = "from SubmittedForm_Geo"; // SUBMFORM_GEO
@@ -63,7 +63,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional
 	public SubmittedForm_Geo return_Submitted_Form_Geo(String username) {
 		//return the submitted that matches the given user name
 
@@ -81,7 +80,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void save_a_row_in_table_acceptedforms_geo(String fname, String lname, String email, int phone_number,
 			String place_of_residence, String place_of_living, String department, int year_of_attendance,
 			String family_state, int number_of_siblings_studying, String annual_family_income,
@@ -119,7 +117,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public ArrayList<AcceptedForm_Geo> check_if_inserted_row_exists(String given_id) {
 		// to check if the inserted row exists! //String given_id_ = retrieve from db ;
 
@@ -152,7 +149,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void save_in_declinedforms_geo(String fname, String lname, String email, int phone_number,
 			String place_of_residence, String place_of_living, String department, int year_of_attendance,
 			String family_state, int number_of_siblings_studying, String annual_family_income,
@@ -193,7 +189,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void delete_a_row_from_subform_table(String username) { // delete a row from submitted forms
 																				// table based on the id
 
@@ -222,7 +217,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public List<AcceptedForm_Geo> get_the_accepted_forms_geo() { // returns the table acceptedforms_geo
 
 		String create_search_query = "from AcceptedForm_Geo order by points desc";
@@ -251,13 +245,11 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public ArrayList<AcceptedForm_Geo> get_the_accepted_forms_order_by_desc_and_until_limit_geo(
 			int limit_of_students_entitled_to_free_meals) { // returns the table acceptedforms_diat order by asc and
 															// only the students entitled to free meals
 
-		String create_search_query = "from AcceptedForm_Geo order by points desc limit "
-				+ limit_of_students_entitled_to_free_meals;
+		String create_search_query = "from AcceptedForm_Geo order by points desc";
 		System.out.println("query: " + create_search_query);
 
 		List<AcceptedForm_Geo> acceptedForms_Geo = new ArrayList<>();
@@ -268,9 +260,10 @@ public class Geo_DAOImpl implements Geo_DAO {
 		try {
 				 // create query
 			Query<AcceptedForm_Geo> query = currentSession.createQuery(create_search_query, AcceptedForm_Geo.class);
+																										 
+			 // this replaces the LIMIT in the query
+			query.setMaxResults(limit_of_students_entitled_to_free_meals);
 
-																													 
-																														
 			// execute the query and get the results list
 			acceptedForms_Geo = query.getResultList();
 
@@ -289,7 +282,6 @@ public class Geo_DAOImpl implements Geo_DAO {
 	}
 
 	@Override
-	@Transactional // because it has to do with the database
 	public void save_a_row_in_table_final_ranking_geo(Final_Ranking_Geo final_ranking) {
 
 				// get current hibernate session		
@@ -336,6 +328,34 @@ public class Geo_DAOImpl implements Geo_DAO {
 		// acceptedform.setPoints(Integer.toString(countpoints));
 		System.out.println("final points :" + countpoints);
 		return countpoints;
+	}
+
+	@Override
+	public long count_number_of_students_from_table_user_dep_geo(String department) {
+		String create_search_query = "select count(*) from Users where department='"+ department+"'"; //group by department";
+		System.out.println("query: " + create_search_query);
+		long number_of_students = 0;
+		//String SQL_QUERY = "SELECT COUNT(*) FROM Users users";
+     
+//		// get current hibernate session
+		Session currentSession = sessionFactory.getCurrentSession();
+		try {
+			// query	
+		  Query query = currentSession.createQuery(create_search_query );
+		    
+		  for(Iterator it=query.iterate();it.hasNext();)
+		  {
+			  number_of_students = (Long) it.next();
+		   System.out.print("Count: " + number_of_students);
+		  }
+		  
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		
+		return number_of_students; // return the result!
 	}
 
 }
