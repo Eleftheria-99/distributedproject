@@ -17,30 +17,30 @@ import dit.hua.project.entities.SubmittedForm_Plir;
 public interface Student_DAO {
 
 	// insert submitted form to database
-	public ArrayList<SubmittedForm_Oik> insert_form_oik(String username, String fname, String lname, String email,
+	public SubmittedForm_Oik insert_form_oik(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents);
 
-	public ArrayList<SubmittedForm_Plir> insert_form_plir(String username, String fname, String lname, String email,
+	public SubmittedForm_Plir insert_form_plir(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents);
 
-	public ArrayList<SubmittedForm_Diat> insert_form_diat(String username, String fname, String lname, String email,
+	public SubmittedForm_Diat insert_form_diat(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents);
 
-	public ArrayList<SubmittedForm_Geo> insert_form_geo(String username, String fname, String lname, String email,
+	public SubmittedForm_Geo insert_form_geo(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents);
 
 	// change personal data
-	public void change_form_oik(String username, String email, int phoneNumber, String placeOfResidence);
+	public SubmittedForm_Oik change_form_oik(String username, String email, int phoneNumber, String placeOfResidence);
 
-	public void change_form_plir(String username, String email, int phoneNumber, String placeOfResidence);
+	public SubmittedForm_Plir change_form_plir(String username, String email, int phoneNumber, String placeOfResidence);
 
-	public void change_form_diat(String username, String email, int phoneNumber, String placeOfResidence);
+	public SubmittedForm_Diat change_form_diat(String username, String email, int phoneNumber, String placeOfResidence);
 
-	public void change_form_geo(String username, String email, int phoneNumber, String placeOfResidence);
+	public SubmittedForm_Geo change_form_geo(String username, String email, int phoneNumber, String placeOfResidence);
 
 	// check if student hasn't submitted his form yet
 	public boolean if_form_NOT_exists_Oik(String username);
@@ -53,6 +53,8 @@ public interface Student_DAO {
 
 	// return student's form
 	public void returnStudentForm_Oik(String username, Model model, String error);
+	public SubmittedForm_Oik returnStudentForm_OikREST(String user);
+
 
 	public void returnStudentForm_Plir(String username, Model model, String error);
 

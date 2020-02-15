@@ -3,6 +3,8 @@ package dit.hua.project.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -30,6 +32,7 @@ public class Student_DAOImpl implements Student_DAO {
 	
 	//find student's department
 	@Override
+	@Transactional
 	public String findwhichDepartment(String username) {
 
 		Users user = new Users();
@@ -52,7 +55,8 @@ public class Student_DAOImpl implements Student_DAO {
 	//INSERT TO DB
 
 	@Override
-	public ArrayList<SubmittedForm_Oik> insert_form_oik(String username, String fname, String lname, String email,
+	@Transactional
+	public SubmittedForm_Oik insert_form_oik(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
 		// inserts new form into table
@@ -81,11 +85,12 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getCause();
 		}
 
-		return null;
+		return form;
 	}
 
 	@Override
-	public ArrayList<SubmittedForm_Plir> insert_form_plir(String username, String fname, String lname, String email,
+	@Transactional
+	public SubmittedForm_Plir insert_form_plir(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
 		// create form
@@ -107,11 +112,12 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getMessage();
 			e.getCause();
 		}
-		return null;
+		return form;
 	}
 
 	@Override
-	public ArrayList<SubmittedForm_Diat> insert_form_diat(String username, String fname, String lname, String email,
+	@Transactional
+	public SubmittedForm_Diat insert_form_diat(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
 
@@ -136,11 +142,12 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getCause();
 		}
 
-		return null;
+		return form;
 	}
 
 	@Override
-	public ArrayList<SubmittedForm_Geo> insert_form_geo(String username, String fname, String lname, String email,
+	@Transactional
+	public SubmittedForm_Geo insert_form_geo(String username, String fname, String lname, String email,
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
 
@@ -164,13 +171,14 @@ public class Student_DAOImpl implements Student_DAO {
 			e.getCause();
 		}
 
-		return null;
+		return form;
 	}
 
 	//CHANGE DATA
 	
 	@Override
-	public void change_form_oik(String username, String email, int phoneNumber, String placeOfResidence) {
+	@Transactional
+	public SubmittedForm_Oik  change_form_oik(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
 
@@ -182,21 +190,20 @@ public class Student_DAOImpl implements Student_DAO {
 			form.setPhoneNumber(phoneNumber);
 			form.setPlaceOfResidence(placeOfResidence);
 
-			currentSession.update(form);
-
-			// return form;
+			currentSession.update(form);    //save form into database
 
 		} catch (Exception e) {
 			e.getStackTrace();
 			e.getMessage();
 			e.getCause();
 		}
-		// return form;
+		return form;
 
 	}
 
 	@Override
-	public void change_form_plir(String username, String email, int phoneNumber, String placeOfResidence) {
+	@Transactional
+	public SubmittedForm_Plir change_form_plir(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
 		try {
@@ -207,21 +214,20 @@ public class Student_DAOImpl implements Student_DAO {
 			form.setPhoneNumber(phoneNumber);
 			form.setPlaceOfResidence(placeOfResidence);
 
-			currentSession.update(form);
-
-			// return form;
+			currentSession.update(form);  //save form into database
 
 		} catch (Exception e) {
 			e.getStackTrace();
 			e.getMessage();
 			e.getCause();
 		}
-		// return form;
+		return form;
 
 	}
 
 	@Override
-	public void change_form_diat(String username, String email, int phoneNumber, String placeOfResidence) {
+	@Transactional
+	public SubmittedForm_Diat change_form_diat(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
 		try {
@@ -231,19 +237,21 @@ public class Student_DAOImpl implements Student_DAO {
 			form.setEmail(email);
 			form.setPhoneNumber(phoneNumber);
 			form.setPlaceOfResidence(placeOfResidence);
-			currentSession.update(form);
+			
+			currentSession.update(form);  //save form into database
 
 		} catch (Exception e) {
 			e.getStackTrace();
 			e.getMessage();
 			e.getCause();
 		}
-		// return form;
+		return form;
 
 	}
 
 	@Override
-	public void change_form_geo(String username, String email, int phoneNumber, String placeOfResidence) {
+	@Transactional
+	public SubmittedForm_Geo change_form_geo(String username, String email, int phoneNumber, String placeOfResidence) {
 
 		SubmittedForm_Geo form = new SubmittedForm_Geo();
 		try {
@@ -253,19 +261,20 @@ public class Student_DAOImpl implements Student_DAO {
 			form.setEmail(email);
 			form.setPhoneNumber(phoneNumber);
 			form.setPlaceOfResidence(placeOfResidence);
-			currentSession.update(form);
+			currentSession.update(form);  //save form into database
 
 		} catch (Exception e) {
 			e.getStackTrace();
 			e.getMessage();
 			e.getCause();
 		}
-		// return form;
+	    return form;
 	}
 	
 	//CHECK IF SUBMITTED FORM DOEN'T EXIST
 
 	@Override
+	@Transactional
 	public boolean if_form_NOT_exists_Oik(String username) {
 
 		try {
@@ -288,6 +297,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public boolean if_form_NOT_exists_Plir(String username) {
 
 		try {
@@ -311,6 +321,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public boolean if_form_NOT_exists_Diat(String username) {
 
 		try {
@@ -332,6 +343,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public boolean if_form_NOT_exists_Geo(String username) {
 
 		try {
@@ -355,6 +367,7 @@ public class Student_DAOImpl implements Student_DAO {
 	//RETURN FORM
 	
 	@Override
+	@Transactional
 	public void returnStudentForm_Oik(String username, Model model, String error) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
@@ -384,6 +397,25 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
+	public SubmittedForm_Oik returnStudentForm_OikREST(String user) {
+		
+		SubmittedForm_Oik form = new SubmittedForm_Oik();
+		try {
+			Session currentSession = sessionFactory.getCurrentSession();
+			form = currentSession.get(SubmittedForm_Oik.class, user);
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			e.getMessage();
+			e.getCause();
+		}
+		return form;
+		
+	}
+
+	@Override
+	@Transactional
 	public void returnStudentForm_Plir(String username, Model model, String error) {
 
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
@@ -416,6 +448,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public void returnStudentForm_Diat(String username, Model model, String error) {
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
 		try {
@@ -444,6 +477,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public void returnStudentForm_Geo(String username, Model model, String error) {
 		SubmittedForm_Geo form = new SubmittedForm_Geo();
 		try {
@@ -475,6 +509,7 @@ public class Student_DAOImpl implements Student_DAO {
 	
 	//ECONOMICS
 	@Override
+	@Transactional
 	public String returnFname_oik(String username) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
@@ -497,6 +532,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public String returnLname_oik(String username) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
@@ -517,6 +553,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public ArrayList<Final_Ranking_Oik> returnFinalRanking_oik_ALL_students_entitled() {
 		String create_search_query = "from Final_Ranking_Oik"; // entity name
 		System.out.println("query: " + create_search_query);
@@ -565,6 +602,7 @@ public class Student_DAOImpl implements Student_DAO {
 	
 	//INFORMATICS
 	@Override
+	@Transactional
 	public String returnFname_plir(String username) {
 		
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
@@ -585,6 +623,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public String returnLname_plir(String username) {
 		
 		SubmittedForm_Plir form = new SubmittedForm_Plir();
@@ -605,6 +644,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 	
 	@Override
+	@Transactional
 	public ArrayList<Final_Ranking_Plir> returnFinalRanking_plir_ALL_students_entitled() {
 		String create_search_query = "from Final_Ranking_Plir"; // entity name
 		System.out.println("query: " + create_search_query);
@@ -652,6 +692,7 @@ public class Student_DAOImpl implements Student_DAO {
 	
 	//GEOGRAPHY
 	@Override
+	@Transactional
 	public String returnFname_geo(String username) {
 
 		SubmittedForm_Geo form = new SubmittedForm_Geo();
@@ -672,6 +713,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public String returnLname_geo(String username) {
 		
 		SubmittedForm_Geo form = new SubmittedForm_Geo();
@@ -694,6 +736,7 @@ public class Student_DAOImpl implements Student_DAO {
 	
 
 	@Override
+	@Transactional
 	public ArrayList<Final_Ranking_Geo> returnFinalRanking_geo_ALL_students_entitled() {
 		String create_search_query = "from Final_Ranking_Geo"; // entity name
 		System.out.println("query: " + create_search_query);
@@ -741,6 +784,7 @@ public class Student_DAOImpl implements Student_DAO {
 	
 	//NUTRITION
 	@Override
+	@Transactional
 	public String returnFname_diat(String username) {
 		
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
@@ -761,6 +805,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 
 	@Override
+	@Transactional
 	public String returnLname_diat(String username) {
 		
 		SubmittedForm_Diat form = new SubmittedForm_Diat();
@@ -781,6 +826,7 @@ public class Student_DAOImpl implements Student_DAO {
 	}
 		
 	@Override
+	@Transactional
 	public ArrayList<Final_Ranking_Diat> returnFinalRanking_diat_ALL_students_entitled() {
 		String create_search_query = "from Final_Ranking_Diat"; // entity name
 		System.out.println("query: " + create_search_query);

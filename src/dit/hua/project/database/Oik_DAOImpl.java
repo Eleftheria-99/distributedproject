@@ -26,6 +26,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	private SessionFactory sessionFactory;
 
 	@Override
+	@Transactional // because it has to do with the database
 	public List<SubmittedForm_Oik> get_the_submitted_forms_oik() {
 
 		String create_search_query = "from SubmittedForm_Oik"; // SUBMFORM_OIK
@@ -66,6 +67,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	
 
 	@Override
+	@Transactional
 	public SubmittedForm_Oik return_Submitted_Form_Oik(String username) {
 
 		SubmittedForm_Oik form = new SubmittedForm_Oik();
@@ -83,6 +85,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	}
 
 	@Override
+	@Transactional // because it has to do with the database
 	public void save_a_row_in_table_acceptedforms_oik(String fname, String lname, String email, int phone_number,
 			String place_of_residence, String place_of_living, String department, int year_of_attendance,
 			String family_state, int number_of_siblings_studying, String annual_family_income,
@@ -121,6 +124,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	}
 
 	@Override
+	@Transactional // because it has to do with the database
 	public ArrayList<AcceptedForm_Oik> check_if_inserted_row_exists(String given_id) {
 		// to check if the inserted row exists! //String given_id_ = retrieve from db ;
 
@@ -166,6 +170,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	}
 
 	@Override
+	@Transactional // because it has to do with the database
 	public void save_in_declinedforms_oik(String fname, String lname, String email, int phone_number,
 			String place_of_residence, String place_of_living, String department, int year_of_attendance,
 			String family_state, int number_of_siblings_studying, String annual_family_income,
@@ -195,6 +200,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	}
 
 	@Override
+	@Transactional // because it has to do with the database
 	public void delete_a_row_from_subform_table(String username) {
 
 		//String delete_query = "from SubmittedForm_Oik where SubmittedForm_Oik.id='" + id_of_the_submitted_form + "'";
@@ -226,6 +232,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	}
 
 	@Override
+	@Transactional // because it has to do with the database
 	public List<AcceptedForm_Oik> get_the_accepted_forms_oik() {// returns the table acceptedforms_diat
 
 		String create_search_query = "from AcceptedForm_Oik order by points desc"; // UBMFORM_DIAT
@@ -254,6 +261,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	}
 
 	@Override
+	@Transactional // because it has to do with the database
 	public ArrayList<AcceptedForm_Oik> get_the_accepted_forms_order_by_desc_and_until_limit_oik(
 			int limit_of_students_entitled_to_free_meals) { // returns the table acceptedforms_oik order by asc and only
 															// the students entitled to free meals
@@ -292,6 +300,7 @@ public class Oik_DAOImpl implements Oik_DAO {
 	}
 
 	@Override
+	@Transactional // because it has to do with the database
 	public void save_a_row_in_table_final_ranking_oik(Final_Ranking_Oik final_ranking) {
 		try { // save it
 				// get current hibernate session

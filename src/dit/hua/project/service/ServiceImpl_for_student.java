@@ -7,22 +7,21 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import dit.hua.project.database.Student_DAO;
-import dit.hua.project.entities.Final_Ranking_Diat;
-import dit.hua.project.entities.Final_Ranking_Geo;
-import dit.hua.project.entities.Final_Ranking_Oik;
-import dit.hua.project.entities.Final_Ranking_Plir;
+import com.google.gson.Gson;
 
-public class ServiceImpl_for_student implements ServiceInterface_for_student{
-	
-	//inject student DAO
+import dit.hua.project.database.Student_DAO;
+import dit.hua.project.entities.*;
+
+@Service
+public class ServiceImpl_for_student implements ServiceInterface_for_student {
+
+	// inject student DAO
 	@Autowired
 	private Student_DAO studentDAO;
-	
-	
-	
+
 	private String username = null;
 	private String fname = null;
 	private String lname = null;
@@ -38,18 +37,25 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 	private String string_number_of_unemployed_parents = null;
 	private int unemployedParents = 0;
 
+	private String error = null;
 
-	
+	@Override
+	@Transactional
+	public String findDepartment(String username) {
+
+		String department = studentDAO.findwhichDepartment(username);
+		return department;
+	}
 
 	@Override
 	@Transactional // because it has to do with the database
-	public String student_service_showSubmittedForm(HttpServletRequest request, Model model, HttpSession session) {
+	public void student_service_showSubmittedForm(HttpServletRequest request, Model model, HttpSession session) {
 
 		fname = request.getParameter("fname");
 		lname = request.getParameter("lname");
 		email = request.getParameter("email");
-		
-		string_phone_number = request.getParameter("phoneNumber");
+
+		string_phone_number = request.getParameter("phonenumber");
 
 		if (string_phone_number == null || string_phone_number.length() == 0) {
 			phoneNumber = -1; // in case of error
@@ -63,8 +69,8 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 		String placeOfResidence = request.getParameter("placeofliving");
 		String placeOfStudying = request.getParameter("placeofstudying");
 		String annualIncome = request.getParameter("FinancialIncome");
-		
-		string_number_of_siblings_studying = request.getParameter("siblingsStudying");
+
+		string_number_of_siblings_studying = request.getParameter("numofsiblingswhostudy");
 
 		if (string_number_of_siblings_studying == null || string_number_of_siblings_studying.length() == 0) {
 			siblingsStudying = -1; // in case of error
@@ -76,8 +82,8 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 			}
 		}
 		String familyStatus = request.getParameter("FamilyStatus");
-		
-		string_year_of_attendance = request.getParameter("yearOfAttendance");
+
+		string_year_of_attendance = request.getParameter("yearofattendance");
 
 		if (string_year_of_attendance == null || string_year_of_attendance.length() == 0) {
 			int_year_of_attendance = -1; // in case of error
@@ -87,9 +93,9 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 			} catch (Exception e) {
 				e.getStackTrace();
 			}
-		}		
+		}
 
-		string_number_of_unemployed_parents = request.getParameter("unemployedParents");
+		string_number_of_unemployed_parents = request.getParameter("UnemployedParents");
 
 		if (string_number_of_unemployed_parents == null || string_number_of_unemployed_parents.length() == 0) {
 			unemployedParents = -1; // -1 means that the id does not exist or was not retrieved
@@ -100,89 +106,128 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 				e.getStackTrace();
 			}
 		}
-		
+
 		String user = (String) session.getAttribute("username");
 		System.out.println("INSIDE PLAIN CONTROLLER USERNAME:   " + user);
 
-	    department = (String) session.getAttribute("department");
+		department = (String) session.getAttribute("department");
 
 		// INFORMATICS
 		if (department.equals("Informatics")) {
 			if (studentDAO.if_form_NOT_exists_Plir(user)) {
-
-				studentDAO.insert_form_plir(user, fname, lname, email, phoneNumber,place_of_residence, placeOfStudying,
-						department, int_year_of_attendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
-				session.setAttribute("email", email);
+				SubmittedForm_Plir form = new SubmittedForm_Plir();
+				form = studentDAO.insert_form_plir(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
+				// Attributes for inserts
+				model.addAttribute("fname", fname);
+				model.addAttribute("lname", lname);
+				model.addAttribute("email", email);
+				model.addAttribute("phone", phoneNumber);
+				model.addAttribute("pofresidence", placeOfResidence);
+				model.addAttribute("pofstudying", placeOfStudying);
+				model.addAttribute("dep", department);
+				model.addAttribute("income", annualIncome);
+				model.addAttribute("siblings", siblingsStudying);
+				model.addAttribute("family", familyStatus);
+				model.addAttribute("year", int_year_of_attendance);
+				model.addAttribute("parents", unemployedParents);
 			} else {
-				String error = "You have already submitted your form!";
-
-				studentDAO.returnStudentForm_Plir(user, model, error);
-
-				return "show-submitted-form";
+				// show error
+				error = "You have already submitted your form!";
+				studentDAO.returnStudentForm_Plir(user, model, error); // type void, does not return anything
 			}
 
 			// GEOGRAPHY
 		} else if (department.equals("Geography")) {
 			if (studentDAO.if_form_NOT_exists_Geo(user)) {
+				SubmittedForm_Geo form = new SubmittedForm_Geo();
+				form = studentDAO.insert_form_geo(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
+				// Attributes for inserts
+				model.addAttribute("fname", fname);
+				model.addAttribute("lname", lname);
+				model.addAttribute("email", email);
+				model.addAttribute("phone", phoneNumber);
+				model.addAttribute("pofresidence", placeOfResidence);
+				model.addAttribute("pofstudying", placeOfStudying);
+				model.addAttribute("dep", department);
+				model.addAttribute("income", annualIncome);
+				model.addAttribute("siblings", siblingsStudying);
+				model.addAttribute("family", familyStatus);
+				model.addAttribute("year", int_year_of_attendance);
+				model.addAttribute("parents", unemployedParents);
 
-				studentDAO.insert_form_geo(user, fname, lname, email, phoneNumber, place_of_residence, placeOfStudying,
-						department, int_year_of_attendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
 			} else {
-				String error = "You have already submitted your form!";
+				// show error
+				error = "You have already submitted your form!";
 				studentDAO.returnStudentForm_Geo(user, model, error);
-
-				return "show-submitted-form";
 			}
 			// NUTRITION
 		} else if (department.equals("Nutrition")) {
 			if (studentDAO.if_form_NOT_exists_Diat(user)) {
-				studentDAO.insert_form_diat(user, fname, lname, email,phoneNumber, place_of_residence, placeOfStudying,
-						department, int_year_of_attendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
+				SubmittedForm_Diat form = new SubmittedForm_Diat();
+				form = studentDAO.insert_form_diat(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
+				// Attributes for inserts
+				model.addAttribute("fname", fname);
+				model.addAttribute("lname", lname);
+				model.addAttribute("email", email);
+				model.addAttribute("phone", phoneNumber);
+				model.addAttribute("pofresidence", placeOfResidence);
+				model.addAttribute("pofstudying", placeOfStudying);
+				model.addAttribute("dep", department);
+				model.addAttribute("income", annualIncome);
+				model.addAttribute("siblings", siblingsStudying);
+				model.addAttribute("family", familyStatus);
+				model.addAttribute("year", int_year_of_attendance);
+				model.addAttribute("parents", unemployedParents);
+
 			} else {
-				String error = "You have already submitted your form!";
-
-				studentDAO.returnStudentForm_Diat(user, model, error);
-
-				return "show-submitted-form";
+				// show error
+				error = "You have already submitted your form!";
+				studentDAO.returnStudentForm_Diat(user, model, error); // type void
 			}
 			// ECONOMICS
 		} else if (department.equals("Economics")) {
 			if (studentDAO.if_form_NOT_exists_Oik(user)) {
-				studentDAO.insert_form_oik(user, fname, lname, email, phoneNumber, place_of_residence, placeOfStudying,
-						department, int_year_of_attendance, familyStatus, siblingsStudying, annualIncome, unemployedParents);
-			} else {
-				String error = "You have already submitted your form!";
-				studentDAO.returnStudentForm_Oik(user, model, error);
+				SubmittedForm_Oik form = new SubmittedForm_Oik();
+				form = studentDAO.insert_form_oik(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
 
-				return "show-submitted-form";
+				// Attributes for inserts
+				model.addAttribute("fname", fname);
+				model.addAttribute("lname", lname);
+				model.addAttribute("email", email);
+				model.addAttribute("phone", phoneNumber);
+				model.addAttribute("pofresidence", placeOfResidence);
+				model.addAttribute("pofstudying", placeOfStudying);
+				model.addAttribute("dep", department);
+				model.addAttribute("income", annualIncome);
+				model.addAttribute("siblings", siblingsStudying);
+				model.addAttribute("family", familyStatus);
+				model.addAttribute("year", int_year_of_attendance);
+				model.addAttribute("parents", unemployedParents);
+
+			} else {
+				// show error
+				error = "You have already submitted your form!";
+				studentDAO.returnStudentForm_Oik(user, model, error);
 			}
 		}
 
-		// Attributes for inserts
-		model.addAttribute("fname", fname);
-		model.addAttribute("lname", lname);
-		model.addAttribute("email", email);
-		model.addAttribute("phone", phoneNumber);
-		model.addAttribute("pofresidence", placeOfResidence);
-		model.addAttribute("pofstudying", placeOfStudying);
-		model.addAttribute("dep", department);
-		model.addAttribute("income", annualIncome);
-		model.addAttribute("siblings", siblingsStudying);
-		model.addAttribute("family", familyStatus);
-		model.addAttribute("year", int_year_of_attendance);
-		model.addAttribute("parents", unemployedParents);
-
-		return "show-submitted-form";			
 	}
 
 	@Override
 	@Transactional // because it has to do with the database
-	public String student_service_ChangedForm(HttpServletRequest request, Model model, HttpSession session) {
+	public void student_service_ChangedForm(HttpServletRequest request, Model model, HttpSession session) {
 
 		email = request.getParameter("email");
-		//int phoneNumber = Integer.parseInt(request.getParameter("phonenumber"));
-		
-		string_phone_number = request.getParameter("phoneNumber");
+
+		string_phone_number = request.getParameter("phonenumber");
 
 		if (string_phone_number == null || string_phone_number.length() == 0) {
 			phoneNumber = -1; // in case of error
@@ -193,129 +238,152 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 				e.getStackTrace();
 			}
 		}
-        String placeOfResidence = request.getParameter("placeofliving");
-		
+		String placeOfResidence = request.getParameter("placeofliving");
+
 		String user = (String) session.getAttribute("username");
-		System.out.println("USER INSIDE CHANGE DATA"+user);
-		
+		System.out.println("USER INSIDE CHANGE DATA" + user);
+
 		department = (String) session.getAttribute("department");
 
-		
 		// INFORMATICS
 		if (department.equals("Informatics")) {
 			if (studentDAO.if_form_NOT_exists_Plir(user)) {
+				// student has not submitted a form yet
 				String notfound = "Sorry, you haven't submitted your form yet!";
 				model.addAttribute("errormessage", notfound);
-				return "st-form";
+				// return "st-form";
 			} else {
-				// SubmittedForm_Plir form = new SubmittedForm_Plir();
-				studentDAO.change_form_plir(user, email, phoneNumber, placeOfResidence);
-				
-				String error = "This is your new up to date form!";
-				studentDAO.returnStudentForm_Plir(user, model,error);
+				// student has submitted a form
+				SubmittedForm_Plir form = new SubmittedForm_Plir();
+				form = studentDAO.change_form_plir(user, email, phoneNumber, placeOfResidence);
 
-				return "show-submitted-form";
+				String error = "This is your new up to date form!";
+				studentDAO.returnStudentForm_Plir(user, model, error);
+
+				// return "show-submitted-form"; //returns the changed form
 			}
 
 			// GEOGRAPHY
 		} else if (department.equals("Geography")) {
 			if (studentDAO.if_form_NOT_exists_Geo(user)) {
+				// student has not submitted a form yet
 				String notfound = "Sorry, you haven't submitted your form yet!";
 				model.addAttribute("errormessage", notfound);
-				return "st-form";
+				// return "st-form";
 			} else {
+				// student has submitted a form
+				SubmittedForm_Geo form = new SubmittedForm_Geo();
+				form = studentDAO.change_form_geo(user, email, phoneNumber, placeOfResidence);
 
-				// SubmittedForm_Geo form = new SubmittedForm_Geo();
-				studentDAO.change_form_geo(user, email, phoneNumber, placeOfResidence);
 				String error = "This is your new up to date form!";
-				studentDAO.returnStudentForm_Geo(user, model,error);
+				studentDAO.returnStudentForm_Geo(user, model, error);
 
-				return "show-submitted-form";
+				// return "show-submitted-form"; //returns the changed form
 			}
 			// NUTRITION
 		} else if (department.equals("Nutrition")) {
 			if (studentDAO.if_form_NOT_exists_Diat(user)) {
+				// student has not submitted a form yet
 				String notfound = "Sorry, you haven't submitted your form yet!";
 				model.addAttribute("errormessage", notfound);
-				return "st-form";
+				// return "st-form";
 			} else {
-				// SubmittedForm_Diat form = new SubmittedForm_Diat();
-				studentDAO.change_form_diat(user, email,phoneNumber, placeOfResidence);
-				String error = "This is your new up to date form!";
+				// student has submitted a form
+				SubmittedForm_Diat form = new SubmittedForm_Diat();
+				form = studentDAO.change_form_diat(user, email, phoneNumber, placeOfResidence);
 
-				studentDAO.returnStudentForm_Diat(user, model,error);
-				
-				return "show-submitted-form";
+				String error = "This is your new up to date form!";
+				studentDAO.returnStudentForm_Diat(user, model, error);
+
+				// return "show-submitted-form"; //returns the changed form
 			}
 			// ECONOMICS
 		} else if (department.equals("Economics")) {
 			if (studentDAO.if_form_NOT_exists_Oik(user)) {
+				// student has not submitted a form yet
 				System.out.println("INSIDE IF");
 				String notfound = "Sorry, you haven't submitted your form yet!";
 				model.addAttribute("errormessage", notfound);
-				return "st-form";
+				// return "st-form";
 			} else {
+				// student has submitted a form
 				System.out.println("INSIDE ELSE");
-				// SubmittedForm_Oik form = new SubmittedForm_Oik();
+
+				SubmittedForm_Oik form = new SubmittedForm_Oik();
 				studentDAO.change_form_oik(user, email, phoneNumber, placeOfResidence);
 
 				String error = "This is your new up to date form!";
+				studentDAO.returnStudentForm_Oik(user, model, error);
 
-				studentDAO.returnStudentForm_Oik(user, model,error);
-
-				return "show-submitted-form";
+				// return "show-submitted-form"; //returns the changed form
 			}
 
 		}
-		return "show-submitted-form";
+		// return "show-submitted-form";
 	}
 
 	@Override
 	@Transactional // because it has to do with the database
-	public String student_service_SeeResults(Model model, HttpSession session) {
+	public Final_Ranking_Oik student_service_SeeResults(Model model, HttpSession session) {
 
 		username = (String) session.getAttribute("username");
-		String dep = (String) session.getAttribute("department");
+		String dep = "Informatics" ; //(String) session.getAttribute("department");
+		Final_Ranking_Oik rank = new Final_Ranking_Oik();
+		// json = gson.toJson(form);
 
 		if (dep.equals("Economics")) {
 
-			seeResults_Oik(model, username, dep);
+			rank = seeResults_Oik(model, username, dep);
 
 		} else if (dep.equals("Informatics")) {
 
-			seeResults_Plir(model, username, dep);
-
+			Final_Ranking_Plir rankPlir = new Final_Ranking_Plir();
+			rankPlir = seeResults_Plir(model, username, dep);
+			rank.setFname(rankPlir.getFname());
+			rank.setId(rankPlir.getId());
+			rank.setLname(rankPlir.getLname());
+			rank.setPoints(rankPlir.getPoints());
 		} else if (dep.equals("Geography")) {
 
-			seeResults_Geo(model, username, dep);
+			Final_Ranking_Geo rankGeo = new Final_Ranking_Geo();
+			rankGeo = seeResults_Geo(model, username, dep);
+			rank.setFname(rankGeo.getFname());
+			rank.setId(rankGeo.getId());
+			rank.setLname(rankGeo.getLname());
+			rank.setPoints(rankGeo.getPoints());
 
 		} else if (dep.equals("Nutrition")) {
 
-			seeResults_Diat(model, username, dep);
+			Final_Ranking_Diat rankDiat = new Final_Ranking_Diat();
+			rankDiat = seeResults_Diat(model, username, dep);
+			rank.setFname(rankDiat.getFname());
+			rank.setId(rankDiat.getId());
+			rank.setLname(rankDiat.getLname());
+			rank.setPoints(rankDiat.getPoints());
 
 		}
 
-		return "st-results";
+		return rank;
 	}
-	
 
 	// ECONOMICS
 	@Transactional // because it has to do with the database
-	private int seeResults_Oik(Model model, String username, String dep) {
+	private Final_Ranking_Oik seeResults_Oik(Model model, String username, String dep) {
 
 		fname = studentDAO.returnFname_geo(username);
 		lname = studentDAO.returnLname_geo(username);
 
 		System.out.println("This is the first name " + fname + " and last name " + lname);
-		
-		ArrayList<Final_Ranking_Oik> arraylist_all_final_ranking_forms = studentDAO.returnFinalRanking_oik_ALL_students_entitled();
+
+		ArrayList<Final_Ranking_Oik> arraylist_all_final_ranking_forms = studentDAO
+				.returnFinalRanking_oik_ALL_students_entitled();
 
 		for (Final_Ranking_Oik users : arraylist_all_final_ranking_forms) {
 			System.out.println("INSIDE FOR");
 			// System.out.println(users);
 			String retrieved_fname = users.getFname();
 			String retrieved_lname = users.getLname();
-			System.out.println("This is the retrived from database first name " + retrieved_fname + " and last name "
+			System.out.println("This is the retrieved from database first name " + retrieved_fname + " and last name "
 					+ retrieved_lname);
 
 			if (retrieved_fname.equals(fname) && retrieved_lname.equals(lname)) {
@@ -325,25 +393,34 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 				model.addAttribute("points", users.getPoints());
 				model.addAttribute("rank", users.getId());
 				model.addAttribute("size", "/40");
-				return 0;
+
+				Final_Ranking_Oik matched_student = new Final_Ranking_Oik(users.getId(), fname, lname,
+						users.getPoints());
+				return matched_student;
+
 			}
 
 		}
-		model.addAttribute("notfound", "Unfortunately, it seems that you're not one of the students with free board!");
-		return 0;
-		}
-	
+
+		String notfound = "Unfortunately, it seems that you're not one of the students with free board!";
+		model.addAttribute("notfound", notfound);
+
+		Final_Ranking_Oik not_found = new Final_Ranking_Oik(0, "not-found", "not-found", 0);
+		return not_found;
+
+	}
 
 	// INFORMATICS
 	@Transactional // because it has to do with the database
-	private int seeResults_Plir(Model model, String username, String dep) {
+	private Final_Ranking_Plir seeResults_Plir(Model model, String username, String dep) {
 
 		fname = studentDAO.returnFname_geo(username);
 		lname = studentDAO.returnLname_geo(username);
 
 		System.out.println("This is the first name " + fname + " and last name " + lname);
-		
-		ArrayList<Final_Ranking_Plir> arraylist_all_final_ranking_forms = studentDAO.returnFinalRanking_plir_ALL_students_entitled();
+
+		ArrayList<Final_Ranking_Plir> arraylist_all_final_ranking_forms = studentDAO
+				.returnFinalRanking_plir_ALL_students_entitled();
 
 		for (Final_Ranking_Plir users : arraylist_all_final_ranking_forms) {
 			System.out.println("INSIDE FOR");
@@ -360,24 +437,33 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 				model.addAttribute("points", users.getPoints());
 				model.addAttribute("rank", users.getId());
 				model.addAttribute("size", "/40");
-				return 0;
+
+				Final_Ranking_Plir matched_student = new Final_Ranking_Plir(users.getId(), fname, lname,
+						users.getPoints());
+				return matched_student;
+
 			}
 
 		}
-		model.addAttribute("notfound", "Unfortunately, it seems that you're not one of the students with free board!");
-		return 0;
+		String notfound = "Unfortunately, it seems that you're not one of the students with free board!";
+		model.addAttribute("notfound", notfound);
+
+		Final_Ranking_Plir not_found = new Final_Ranking_Plir(0, "not-found", "not-found", 0);
+		return not_found;
+
 	}
 
 	// GEOGRAPHY
 	@Transactional // because it has to do with the database
-	private int seeResults_Geo(Model model, String username, String dep) {
+	private Final_Ranking_Geo seeResults_Geo(Model model, String username, String dep) {
 
 		fname = studentDAO.returnFname_geo(username);
 		lname = studentDAO.returnLname_geo(username);
 
 		System.out.println("This is the first name " + fname + " and last name " + lname);
-		
-		ArrayList<Final_Ranking_Geo> arraylist_all_final_ranking_forms = studentDAO.returnFinalRanking_geo_ALL_students_entitled();
+
+		ArrayList<Final_Ranking_Geo> arraylist_all_final_ranking_forms = studentDAO
+				.returnFinalRanking_geo_ALL_students_entitled();
 
 		for (Final_Ranking_Geo users : arraylist_all_final_ranking_forms) {
 			System.out.println("INSIDE FOR");
@@ -394,18 +480,24 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 				model.addAttribute("points", users.getPoints());
 				model.addAttribute("rank", users.getId());
 				model.addAttribute("size", "/40");
-				return 0;
+				Final_Ranking_Geo matched_student = new Final_Ranking_Geo(users.getId(), fname, lname,
+						users.getPoints()); // int id, String fname, String lname, int points -> constructor for that!!
+				return matched_student;
+
 			}
 
 		}
-		model.addAttribute("notfound", "Unfortunately, it seems that you're not one of the students with free board!");
-		return 0;
-	}
+		String notfound = "Unfortunately, it seems that you're not one of the students with free board!";
+		model.addAttribute("notfound", notfound);
 
+		Final_Ranking_Geo not_found = new Final_Ranking_Geo(0, "not-found", "not-found", 0);
+		return not_found;
+
+	}
 
 	// NUTRITION
 	@Transactional // because it has to do with the database
-	private int seeResults_Diat(Model model, String username, String dep) {
+	private Final_Ranking_Diat seeResults_Diat(Model model, String username, String dep) {
 
 		fname = studentDAO.returnFname_diat(username);
 		lname = studentDAO.returnLname_diat(username);
@@ -430,12 +522,93 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student{
 				model.addAttribute("points", users.getPoints());
 				model.addAttribute("rank", users.getId());
 				model.addAttribute("size", "/40");
-				return 0;
+				Final_Ranking_Diat matched_student = new Final_Ranking_Diat(users.getId(), fname, lname,
+						users.getPoints()); // int id, String fname, String lname, int points -> constructor for that!!
+
+				return matched_student;
 			}
 
 		}
-		model.addAttribute("notfound", "Unfortunately, it seems that you're not one of the students with free board!");
-		return 0;
+		String notfound = "Unfortunately, it seems that you're not one of the students with free board!";
+		model.addAttribute("notfound", notfound);
+
+		Final_Ranking_Diat not_found = new Final_Ranking_Diat(0, "not-found", "not-found", 0);
+		return not_found;
+
 	}
 
+	// methods for external/rest
+	@Override
+	@Transactional
+	public SubmittedForm_Oik student_service_externalInsert(String user, String fname, String lname, String email,
+			int phoneNumber, String place_of_residence, String placeOfStudying, String department,
+			int int_year_of_attendance, String familyStatus, int siblingsStudying, String annualIncome,
+			int unemployedParents) {
+		System.out.println("INSIDE EXTERNAL INSERT STUDENT SERVICE");
+		SubmittedForm_Oik form_oik = new SubmittedForm_Oik();
+		SubmittedForm_Plir form_plir = new SubmittedForm_Plir();
+		SubmittedForm_Geo form_geo = new SubmittedForm_Geo();
+		SubmittedForm_Diat form_diat = new SubmittedForm_Diat();
+
+		SubmittedForm_Oik formOik = new SubmittedForm_Oik(fname, lname, email, phoneNumber, place_of_residence,
+				placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying, annualIncome,
+				unemployedParents);
+		// INFORMATICS
+		if (department.equals("Informatics")) {
+			if (studentDAO.if_form_NOT_exists_Plir(user)) {
+
+				form_plir = studentDAO.insert_form_plir(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
+				System.out.println(form_plir.toString());
+			} else {
+				// show error
+				error = "You have already submitted your form!";
+				formOik.setDepartment(error);
+			}
+
+			// GEOGRAPHY
+		} else if (department.equals("Geography")) {
+			if (studentDAO.if_form_NOT_exists_Geo(user)) {
+
+				form_geo = studentDAO.insert_form_geo(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
+				System.out.println(form_geo.toString());
+
+			} else {
+				// show error
+				error = "You have already submitted your form!";
+				formOik.setDepartment(error);
+			}
+			// NUTRITION
+		} else if (department.equals("Nutrition")) {
+			if (studentDAO.if_form_NOT_exists_Diat(user)) {
+				form_diat = studentDAO.insert_form_diat(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
+				System.out.println(form_diat.toString());
+			} else {
+				// show error
+				error = "You have already submitted your form!";
+				formOik.setDepartment(error);
+			}
+			// ECONOMICS
+		} else if (department.equals("Economics")) {
+			if (studentDAO.if_form_NOT_exists_Oik(user)) {
+				form_oik = studentDAO.insert_form_oik(user, fname, lname, email, phoneNumber, place_of_residence,
+						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
+						annualIncome, unemployedParents);
+				System.out.println(form_oik.toString());
+			} else {
+				// show error
+				error = "You have already submitted your form!";
+				formOik.setDepartment(error);
+			}
+		}
+		System.out.println("form was just submitted - student service");
+
+		// formOik =(SubmittedForm_Dat) form_diat;
+		return formOik;
+	}
 }

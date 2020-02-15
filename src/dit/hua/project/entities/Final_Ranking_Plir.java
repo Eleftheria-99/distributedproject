@@ -32,6 +32,13 @@ public class Final_Ranking_Plir implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	public Final_Ranking_Plir(int id, String fname, String lname, int points) {
+		super();
+		this.id = id;
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
+	}
 
 	public Final_Ranking_Plir(String fname, String lname, int  points) {
 		super();

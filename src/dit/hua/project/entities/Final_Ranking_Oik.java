@@ -30,7 +30,15 @@ public class Final_Ranking_Oik implements Serializable{
 	public Final_Ranking_Oik(){
 		super();
 	}
-	
+
+	public Final_Ranking_Oik(int id, String fname, String lname, int points) {
+		super();
+		this.id = id;
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
+	}
+
 	public Final_Ranking_Oik(String fname, String lname, int points) {
 		super();
 		this.fname = fname;

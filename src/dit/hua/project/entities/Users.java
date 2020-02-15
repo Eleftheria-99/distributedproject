@@ -76,6 +76,12 @@ public class Users {
 		this.enabled = enabled;
 	}
 	
+	public Users(String username,String department) {
+		super();
+		this.username = username;
+		this.department=department;
+	}
+	
 	
 	
 

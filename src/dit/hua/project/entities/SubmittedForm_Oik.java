@@ -62,6 +62,35 @@ public class SubmittedForm_Oik {
 	}
 
 
+	public SubmittedForm_Oik(String fname, String lname, String email, int phoneNumber) {
+		super();
+		Fname = fname;
+		Lname = lname;
+		Email = email;
+		PhoneNumber = phoneNumber;
+	}
+
+
+	public SubmittedForm_Oik(String username, String fname, String lname, String email, int phoneNumber,
+			String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
+			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents) {
+		super();
+		this.username = username;
+		Fname = fname;
+		Lname = lname;
+		Email = email;
+		PhoneNumber = phoneNumber;
+		PlaceOfResidence = placeOfResidence;
+		PlaceOfStudying = placeOfStudying;
+		Department = department;
+		YearOfAttendance = yearOfAttendance;
+		FamilyStatus = familyStatus;
+		SiblingsStudying = siblingsStudying;
+		AnnualIncome = annualIncome;
+		UnemployedParents = unemployedParents;
+	}
+
+
 	public SubmittedForm_Oik(String fname, String lname, String email, int phoneNumber, String placeOfResidence,
 			String placeOfStudying, String department, int yearOfAttendance, String familyStatus, int siblingsStudying,
 			String annualIncome, int unemployedParents) {

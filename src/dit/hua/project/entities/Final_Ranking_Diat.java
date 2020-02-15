@@ -34,6 +34,13 @@ public class Final_Ranking_Diat implements Serializable{
 		super();
 		
 	}
+	public Final_Ranking_Diat(int id, String fname, String lname, int points) {
+		super();
+		this.id = id;
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
+	}
 
 	public Final_Ranking_Diat(String fname, String lname, int points) {
 		super();
