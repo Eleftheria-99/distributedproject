@@ -47,42 +47,24 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 		@Override
         protected void configure(HttpSecurity http) {
 			try {
-//			 http.csrf().disable()
-//			 .antMatcher("/api/**")
-//			 .antMatcher("/DSExternal/**")
-//			//.anyRequest().authenticated()
-//			//.and()
-//			//.http
-//			 .authorizeRequests()
-//				//.antMatchers("/") //.permitAll()                          //anyone can see it, no authentication needed
-//				//.antMatchers("/login")//.permitAll()                     //anyone can see it, no authentication needed
-////				.antMatchers("/login/main-menu-for-all/**").authenticated()
-//				//.antMatchers("/api/login/main-menu-for-all/*").hasRole("student")
-//				//.antMatchers("/api/login/main-menu-for-all/*").hasRole("employee")
-//		    	//.antMatchers("/api/login/main-menu-for-all/*").hasRole("supervisor")
-//				.and()
-//					.formLogin().loginPage("/DSExternal/login")   //  /DSExternal/login    declare the log in page 
-//					.loginProcessingUrl("/DSExternal/login/main-menu-for-all")
-//					.defaultSuccessUrl("/DSExternal/login/main-menu-for-all")
-//					.permitAll()
-//				 .and()
-//					.logout()
-//					//.logoutSuccessUrl("/just-logged-out")
-//					//.logoutSuccessUrl("/login")
-//		            .permitAll()
-//		            .and()
-//		            .httpBasic(withDefaults())                     //.httpBasic(withDefaults());   .httpBasic()  
-//		            .and()
-//		            .exceptionHandling().accessDeniedPage("/403");
 				 http		
-				.headers().disable()
-			    .csrf().disable()
-		        .authorizeRequests()
-		        .antMatchers("/api/**")
-				 //.antMatchers("/DSExternal/**")
-		        .hasRole("student");
-		       
-		        //.and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
+				//.headers().disable()
+			   // .csrf().disable()
+			        .authorizeRequests()
+			        .antMatchers("/").permitAll()  
+			        .antMatchers("/api/login").permitAll()  
+			        .antMatchers("/api/login/**")
+					 //.antMatchers("/DSExternal/**")
+			        .hasRole("student")
+		        .and()
+					.formLogin().loginPage("/api/login")   //declare the log in page 
+					.loginProcessingUrl("/api/login/main-menu-for-all")
+					.defaultSuccessUrl("/api/login/main-menu-for-all")
+					.permitAll()
+			    .and()
+					.logout()
+					.permitAll();	       
+		       // .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
 		        //.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);// always create session //stateless if We don't need sessions to be created.
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -108,7 +90,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 		public void configure(WebSecurity web) {
 			try {
 				web.ignoring().antMatchers("/resources/*");
-				 web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");   /* To allow Pre-flight [OPTIONS] request from browser */
+				web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");   /* To allow Pre-flight [OPTIONS] request from browser */
+				web.ignoring().antMatchers("/api/**");
 			} catch (Exception e) {
 				e.getStackTrace();
 			}
@@ -120,10 +103,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 			try {
 
 			http.authorizeRequests()
-				//.anyRequest().authenticated()
 				.antMatchers("/").permitAll()                          //anyone can see it, no authentication needed
 				.antMatchers("/login").permitAll()                     //anyone can see it, no authentication needed
-//				.antMatchers("/login/main-menu-for-all/**").authenticated()
 				.antMatchers("/login/main-menu-for-all/*").hasRole("student")
 				.antMatchers("/login/main-menu-for-all/*").hasRole("employee")
 		    	.antMatchers("/login/main-menu-for-all/*").hasRole("supervisor")

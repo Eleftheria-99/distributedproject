@@ -29,7 +29,8 @@ public class StudentRestController {
 	@Autowired
 	ServiceInterface_for_student student_service;
 
-	Users user = null;
+	protected Users user = null;
+	protected String username_send_from_client_from_form_login_with_post = null;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showHomePage() {
@@ -49,17 +50,17 @@ public class StudentRestController {
 	
 	@RequestMapping(value = "/login/main-menu-for-all", method = RequestMethod.POST)
 	public String showMainMenuForAll_retrieve_username_from_client(@RequestBody Users user_username, HttpServletRequest request, Model model, HttpSession session,
-			Authentication auth, @RequestHeader("Authorization") String language) {
+			Authentication auth, @RequestHeader(value = "Authorization", required=false) String credentials) {
 		System.out.println("ready to show: main menu for all users page POST METHOD REST CONTROLLERS");
-
+		System.out.println("ready to show: main menu for all users page requested header from client: "+  credentials);
 		System.out.println("ready to show: main menu for all users page USERNAME RETRIEVED FRoM CLIENT: "+  user_username.toString());
+	
+		username_send_from_client_from_form_login_with_post = user_username.getUsername();
 	if (user_username == null) 
 		return "HttpStatus.NOT_FOUND";
 		
 	else 
 		return "HttpStatus.OK";
-		//	return return_username_and_department(auth); // returns object type of Users, which contains the username and
-														// the department
 	}
 	
 	
@@ -69,7 +70,7 @@ public class StudentRestController {
 			Authentication auth) {
 		System.out.println("ready to show: main menu for all users page");
 
-		return return_username_and_department(auth); // returns object type of Users, which contains the username and
+		return return_username_and_department(auth, username_send_from_client_from_form_login_with_post); // returns object type of Users, which contains the username and
 														// the department
 	}
 
@@ -78,15 +79,15 @@ public class StudentRestController {
 	public @ResponseBody Users getdepartment(HttpSession session, Authentication auth) {
 		System.out.println("ready to show: form");
 
-		return return_username_and_department(auth); // returns object type of Users, which contains the username and
-														// the department
+		return return_username_and_department(auth, username_send_from_client_from_form_login_with_post);
+		// returns object type of Users, which contains the username and  the department
 	}
 
 	// the form is being saved and it will be shown on the screen
 	// So we want to return the form of the student after it has been submitted
 	@PostMapping(value = "/login/main-menu-for-all/showForm/StudentForm", produces = "application/json", consumes="application/json")
-	public void insertForm(@RequestBody SubmittedForm_Oik form, HttpServletRequest request, Model model, HttpSession session) { 
-		
+	public String insertForm(@RequestBody SubmittedForm_Oik form, HttpServletRequest request, Model model, HttpSession session) { 
+		System.out.println("StudentRestController: insert form ");
 		String error = "You have already submitted your form!";
 		
         //here method to save object in database
@@ -94,71 +95,75 @@ public class StudentRestController {
 				form.getPhoneNumber(),form.getPlaceOfResidence(), form.getPlaceOfStudying(), form.getDepartment(),
 				form.getYearOfAttendance(),form.getFamilyStatus(),form.getSiblingsStudying(), form.getAnnualIncome(), 
 				form.getUnemployedParents());
-		if(form.getDepartment()== error) {
-			
-		}
+		if(form.getDepartment()== error) {  //the student has already submitted a form
+			System.out.println("StudentRestController: insert form: "+error);
+			return "HttpStatus.Student.has.already.submitted.form";
+		}else 
+			return "HttpStatus.OK.form.inserted.into.database";
 
 	}
 	
 	@GetMapping(value = "/showForm/StudentForm/{studentusername}", produces = "application/json")
 	public @ResponseBody SubmittedForm_Oik send_the_insertedForm(@PathVariable String usernname, Model model, HttpSession session) { 
-		
+		//based on the username returns object containing submitted form
 		SubmittedForm_Oik formOik = new SubmittedForm_Oik("ele", "ele","ele","ele",
 				0,"ele", "ele","ele",
 				0,"ele",0, "ele", 
 				0);
 		//student_service.student_service_showSubmittedForm(request, model, session);
-	//return form;
+
 		return formOik;
 	}
-	
-	
-	
-	
+		
 	
 	
 	@GetMapping(value = "/login/main-menu-for-all/change-data", produces = "application/json")
 	public @ResponseBody Users ChangePersonalData(Authentication auth) {
 		System.out.println("ready to show: change personal data - student rest controller");
 
-		return return_username_and_department(auth);
+		return return_username_and_department(auth, username_send_from_client_from_form_login_with_post);
 	}
+	
+	
 
 	@PutMapping(value = "/login/main-menu-for-all/change-data/newForm") // login/main-menu-for-all/student-menu/change-data/newForm
-	protected @ResponseBody String ChangedForm(HttpServletRequest request, Model model, HttpSession session) {
+	protected @ResponseBody String ChangedForm(@RequestBody SubmittedForm_Oik form, HttpServletRequest request, Model model, HttpSession session) {
 		System.out.println("ready to show: changed form - student rest controller");
 		// returns the changed form in string, which consists of a Json
-		//return student_service.student_service_ChangedForm(request, model, session);
-		return null;
-	}
-	
-	
-	
-	
-	
+		System.out.println("changed form - student rest controller: the changed data from client : "+form.toString());
+		
+		//save them into db !!!!!!!!   --MISSING
+
+		
+		if (form == null) 
+			return "HttpStatus.changed.data.NOT_FOUND";	
+		else 
+			return "HttpStatus.changed.data.OK";
+		}
+		
 	
 
 	@GetMapping(value = "/login/main-menu-for-all/showResults", produces = "application/json")
 	protected @ResponseBody Final_Ranking_Oik SeeResults(Model model, HttpSession session) {
 		System.out.println("ready to show: see results - student rest controller");
-		System.out.println("ready to show: see results - student rest controller- final ranking object returned from db: "+student_service.student_service_SeeResults(model, session));
+		System.out
+				.println("ready to show: see results - student rest controller- final ranking object returned from db: "
+						+ student_service.student_service_SeeResults(model, session));
 		return student_service.student_service_SeeResults(model, session);
-		
+
 	}
 
+	// log out http://localhost/DistributedSystems
+	@RequestMapping(value = "/just-logged-out", method = RequestMethod.GET)
+	public String logout(HttpSession session, Model model) {
+		session.removeAttribute("username");
+		model.addAttribute("log_out_message", "You have just logged out!");
+		return "redirect:/login";
+	}
 
-	
-//	//log out   http://localhost/DistributedSystems
-//			@RequestMapping(value = "/just-logged-out", method = RequestMethod.GET)
-//			public String logout(HttpSession session, Model model) {
-//				session.removeAttribute("username");
-//				model.addAttribute("log_out_message", "You have just logged out!");
-//				return "redirect:/login";
-//			}
-
-	protected Users return_username_and_department(Authentication auth) {
+	protected Users return_username_and_department(Authentication auth, String username_from_client) {  //returns object that contains the username from the user, that was sent to the server through post reqeust and the department that was found in the database
 		String department = null;
-		String username = "andreas";
+		String username = username_from_client;
 		user = new Users();
 
 		//auth = SecurityContextHolder.getContext().getAuthentication();
@@ -168,7 +173,7 @@ public class StudentRestController {
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
-		System.out.println("username: " + username + "department: " + department);
+		System.out.println("username: " + username + "and found department: " + department);
 
 		user = new Users(username, department); // username, department
 		return user;
