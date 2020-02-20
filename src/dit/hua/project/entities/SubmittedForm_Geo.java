@@ -1,5 +1,6 @@
 package dit.hua.project.entities;
 
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +10,20 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "SUBMFORM_GEO")
-public class SubmittedForm_Geo  {
+public class SubmittedForm_Geo implements Serializable {
+
+//	
+//	@Column(name = "ID")
+//	@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     ++CHANGE CONSTRUCTOR !!, WITHOUT id field
+//    private int id;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
+//	@OneToOne(cascade=CascadeType.ALL)                                       //annotation for foreign key  in users.java
 	@Column(name = "USERNAME")
 	private String username;
 	
@@ -206,12 +218,15 @@ public class SubmittedForm_Geo  {
 
 	@Override
 	public String toString() {
-		return "Informatics [ Fname=" + Fname + ", Lname=" + Lname + ", Email=" + Email + ", PhoneNumber="
-				+ PhoneNumber + ", PlaceOfResidence=" + PlaceOfResidence + ", PlaceOfStudying=" + PlaceOfStudying
-				+ ", Department=" + Department + ", YearOfAttendance=" + YearOfAttendance + ", FamilyStatus="
-				+ FamilyStatus + ", SiblingsStudying=" + SiblingsStudying + ", AnnualIncome=" + AnnualIncome
-				+ ", UnemployedParents=" + UnemployedParents + "]";
-	}	
+		return "SubmittedForm_Geo [username=" + username + ", Fname=" + Fname + ", Lname=" + Lname + ", Email=" + Email
+				+ ", PhoneNumber=" + PhoneNumber + ", PlaceOfResidence=" + PlaceOfResidence + ", PlaceOfStudying="
+				+ PlaceOfStudying + ", Department=" + Department + ", YearOfAttendance=" + YearOfAttendance
+				+ ", FamilyStatus=" + FamilyStatus + ", SiblingsStudying=" + SiblingsStudying + ", AnnualIncome="
+				+ AnnualIncome + ", UnemployedParents=" + UnemployedParents + "]";
+	}
+
+
+	
 	
 	
 	

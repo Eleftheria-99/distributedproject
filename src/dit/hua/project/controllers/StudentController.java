@@ -22,6 +22,7 @@ public class StudentController {
 
 	@RequestMapping(value = "login/main-menu-for-all/student-menu/showForm/StudentForm", method = RequestMethod.GET)
 	protected String showSubmittedForm(HttpServletRequest request, Model model, HttpSession session) {
+		//student_service.rest_service_showSubmittedForm();
 		student_service.student_service_showSubmittedForm(request, model, session);
 		return "show-submitted-form";	
 	}

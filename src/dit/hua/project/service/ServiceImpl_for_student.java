@@ -379,13 +379,7 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 
 		for (Final_Ranking_Oik users : arraylist_all_final_ranking_forms) {
 			System.out.println("INSIDE FOR");
-			// System.out.println(users);
-//			String retrieved_fname = users.getFname();
-//			String retrieved_lname = users.getLname();
-//			System.out.println("This is the retrieved from database first name " + retrieved_fname + " and last name "
-//					+ retrieved_lname);
-
-		//	if (retrieved_fname.equals(fname) && retrieved_lname.equals(lname)) {
+		
 			if (users.getUsername().equals(username)) {
 				System.out.println("INSIDE IF");
 				model.addAttribute("Points", "Point : ");
@@ -668,7 +662,7 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 		if (department.equals("Informatics")) {
 			if (studentDAO.if_form_NOT_exists_Plir(user)) {
 				// student has not submitted a form yet
-				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
+				String notfound = "{\"error\":\"Sorry, you haven't submitted your form yet!\"}"; // MAKE IT JSON
 				 return notfound;
 			} else {
 				// student has submitted a form
@@ -693,7 +687,7 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 		} else if (department.equals("Geography")) {
 			if (studentDAO.if_form_NOT_exists_Geo(user)) {
 				// student has not submitted a form yet
-				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
+				String notfound = "{\"error\":\"Sorry, you haven't submitted your form yet!\"}"; // MAKE IT JSON
 				 return notfound;
 			} else {
 				// student has submitted a form
@@ -718,7 +712,7 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 			if (studentDAO.if_form_NOT_exists_Diat(user)) {
 
 				// student has not submitted a form yet
-				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
+				String notfound = "{\"error\":\"Sorry, you haven't submitted your form yet!\"}"; // MAKE IT JSON
 				 return notfound;
 			} else {
 				// student has submitted a form
@@ -742,8 +736,8 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 		} else if (department.equals("Economics")) {
 			if (studentDAO.if_form_NOT_exists_Oik(user)) {
 				// student has not submitted a form yet
-				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
-				// return notfound;
+				String notfound = "{\"error\":\"Sorry, you haven't submitted your form yet!\"}"; // MAKE IT JSON
+				return notfound;
 			} else {
 				// student has submitted a form
 

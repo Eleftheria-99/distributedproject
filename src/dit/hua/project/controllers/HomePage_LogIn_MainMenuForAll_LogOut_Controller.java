@@ -26,9 +26,9 @@ public class HomePage_LogIn_MainMenuForAll_LogOut_Controller {
 	
 	@RequestMapping(value="/",method = RequestMethod.GET)
 	public String showHomePage(){	
-		return "home-page";     //the user must click to the href: login in order to go to the login page
+		return "home-page";
 	}
-	
+	//the user must click to the href: login in order to go t teh login page
 	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -40,13 +40,13 @@ public class HomePage_LogIn_MainMenuForAll_LogOut_Controller {
 	}
 
 	
-	@RequestMapping(value = "/login/main-menu-for-all", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all", method = RequestMethod.GET)
 	public String showMainMenuForAll(HttpServletRequest request, Model model, HttpSession session,Authentication auth) {
 		System.out.println("ready to show: main menu for all users page");
 		
-		auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-		
+//		auth = SecurityContextHolder.getContext().getAuthentication();
+//		String username = auth.getName();
+		String username = request.getParameter("username");
 		session.setAttribute("username", username);
 
 		String department = student_service.findDepartment(username);

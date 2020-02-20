@@ -689,7 +689,7 @@ public class Student_DAOImpl implements Student_DAO {
 
 			// execute the query and get the results list
 			all_finalranking_forms = query.getResultList();
-			System.out.println("getting  list");
+			System.out.println("getting  list"+all_finalranking_forms);
 
 		} catch (Exception e) {
 			e.getStackTrace();

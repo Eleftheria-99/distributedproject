@@ -14,7 +14,8 @@ public class AcceptedForms_Plir implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id                       //primary key 
-    @Column(name = "ID")
+    //@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
+	@Column(name = "ID")
 	protected int id;
 	
 	@Column(name = "FNAME")

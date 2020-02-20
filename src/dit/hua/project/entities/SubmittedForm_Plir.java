@@ -13,7 +13,9 @@ import javax.persistence.Table;
 public class SubmittedForm_Plir {
 	
 	@Id
-	@Column(name = "USERNAME")
+//	@OneToOne(cascade=CascadeType.ALL)                                       //annotation for foreign key  in users.java
+//	@JoinColumn(name = "USERNAME")
+	@Column(name="USERNAME")
 	private String username;
 	
 	@Column(name = "FNAME")
@@ -225,14 +227,17 @@ public class SubmittedForm_Plir {
 		this.username = username;
 	}
 
+
 	@Override
 	public String toString() {
-		return "Informatics [Fname=" + Fname + ", Lname=" + Lname + ", Email=" + Email + ", PhoneNumber="
-				+ PhoneNumber + ", PlaceOfResidence=" + PlaceOfResidence + ", PlaceOfStudying=" + PlaceOfStudying
-				+ ", Department=" + Department + ", YearOfAttendance=" + YearOfAttendance + ", FamilyStatus="
-				+ FamilyStatus + ", SiblingsStudying=" + SiblingsStudying + ", AnnualIncome=" + AnnualIncome
-				+ ", UnemployedParents=" + UnemployedParents + "]";
-	}	
+		return "SubmittedForm_Plir [username=" + username + ", Fname=" + Fname + ", Lname=" + Lname + ", Email=" + Email
+				+ ", PhoneNumber=" + PhoneNumber + ", PlaceOfResidence=" + PlaceOfResidence + ", PlaceOfStudying="
+				+ PlaceOfStudying + ", Department=" + Department + ", YearOfAttendance=" + YearOfAttendance
+				+ ", FamilyStatus=" + FamilyStatus + ", SiblingsStudying=" + SiblingsStudying + ", AnnualIncome="
+				+ AnnualIncome + ", UnemployedParents=" + UnemployedParents + "]";
+	}
+
+	
 	
 	
 	

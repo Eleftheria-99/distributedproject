@@ -18,36 +18,29 @@ public class Final_Ranking_Diat implements Serializable{
 	@Id                       //primary key 
 	@Column(name = "ID")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
-	private int id;
-	
-	@Column(name = "USERNAME")
-	private String username;
+	protected int id;
 	
 	@Column(name = "FNAME")
-	private String fname;
+	protected String fname;
 	
 	@Column(name = "LNAME")
-	private String lname;
+	protected String lname;
 
 	@Column(name = "POINTS")
-	private int points;
-		
+	protected int points;
 	
-	public Final_Ranking_Diat(String username, String fname, String lname, int points) {
-		super();
-		this.username = username;
-		this.fname = fname;
-		this.lname = lname;
-		this.points = points;
+	@Column(name = "username")
+	private String username;
+	
+	public String getUsername() {
+		return username;
 	}
-	public Final_Ranking_Diat(int id, String username, String fname, String lname, int points) {
-		super();
-		this.id = id;
+
+	public void setUsername(String username) {
 		this.username = username;
-		this.fname = fname;
-		this.lname = lname;
-		this.points = points;
 	}
+
+	
 	public Final_Ranking_Diat() {
 		super();
 		
@@ -67,17 +60,23 @@ public class Final_Ranking_Diat implements Serializable{
 		this.points = points;
 	}
 
-	@Override
-	public String toString() {
-		return "Final_Ranking_Diat [id=" + id + ", fname=" + fname + ", lname=" + lname + ", points=" + points + "]";
-	}
-
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
+	
+	public Final_Ranking_Diat(String fname, String lname, int points, String username) {
+		super();
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
 		this.username = username;
 	}
+
+	
+
+	@Override
+	public String toString() {
+		return "Final_Ranking_Diat [id=" + id + ", fname=" + fname + ", lname=" + lname + ", points=" + points
+				+ ", username=" + username + "]";
+	}
+
 	public int getId() {
 		return id;
 	}

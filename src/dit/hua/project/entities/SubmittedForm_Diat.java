@@ -12,6 +12,7 @@ public class SubmittedForm_Diat {
 
 	
 	@Id
+//	@OneToOne(cascade=CascadeType.ALL)                                       //annotation for foreign key  in users.java
 	@Column(name = "USERNAME")
 	private String username;
 	
@@ -203,15 +204,18 @@ public class SubmittedForm_Diat {
 		UnemployedParents = unemployedParents;
 	}
 
-	
+
 	@Override
 	public String toString() {
-		return "Informatics [ Fname=" + Fname + ", Lname=" + Lname + ", Email=" + Email + ", PhoneNumber="
-				+ PhoneNumber + ", PlaceOfResidence=" + PlaceOfResidence + ", PlaceOfStudying=" + PlaceOfStudying
-				+ ", Department=" + Department + ", YearOfAttendance=" + YearOfAttendance + ", FamilyStatus="
-				+ FamilyStatus + ", SiblingsStudying=" + SiblingsStudying + ", AnnualIncome=" + AnnualIncome
-				+ ", UnemployedParents=" + UnemployedParents + "]";
-	}	
+		return "SubmittedForm_Diat [username=" + username + ", Fname=" + Fname + ", Lname=" + Lname + ", Email=" + Email
+				+ ", PhoneNumber=" + PhoneNumber + ", PlaceOfResidence=" + PlaceOfResidence + ", PlaceOfStudying="
+				+ PlaceOfStudying + ", Department=" + Department + ", YearOfAttendance=" + YearOfAttendance
+				+ ", FamilyStatus=" + FamilyStatus + ", SiblingsStudying=" + SiblingsStudying + ", AnnualIncome="
+				+ AnnualIncome + ", UnemployedParents=" + UnemployedParents + "]";
+	}
+
+	
+	
 	
 	
 	
