@@ -33,15 +33,15 @@ The final ranking results results from the accepted forms and after the end of t
 
 Some indicative usernames and passwords are : 
 
-username - password - role  -- department :
+username - password - role   :
  
->emp1       - 1111 - employee       --null
->emp2       - 1111 - employee       --null
->supervisor - 1234 - supervisor     --null
->admin      - 0000 - administrator  --null
->eleftheria - 147  - student        --Informatics
->eirini     - 147  - student        --Informatics
->elpida     - 147  - student        --Informatics
->eleni6     - 789  - student        --Economics
->andreas9   - 321  - student        --Geography
->andreas5   - 100  - student        --Nutrition
+>emp1       - 1111 - employee       
+>emp2       - 1111 - employee       
+>supervisor - 1234 - supervisor    
+>admin      - 0000 - administrator 
+>eleftheria - 147  - student        
+>eirini     - 147  - student       
+>elpida     - 147  - student     
+>eleni6     - 789  - student        
+>andreas9   - 321  - student        
+>andreas5   - 100  - student        
