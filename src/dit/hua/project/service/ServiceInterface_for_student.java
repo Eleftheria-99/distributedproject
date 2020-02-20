@@ -27,7 +27,8 @@ public interface ServiceInterface_for_student {
 			int phoneNumber, String placeOfResidence, String placeOfStudying, String department, int yearOfAttendance,
 			String familyStatus, int siblingsStudying, String annualIncome, int unemployedParents);
 
-		
+	public String student_service_externalChangedForm(SubmittedForm_Oik form);
+
 //	private String seeResults_Diat(Model model, String username, String dep)
 //	private String seeResults_Geo(Model model, String username, String dep)
 //	private String seeResults_Oik(Model model, String username, String dep)

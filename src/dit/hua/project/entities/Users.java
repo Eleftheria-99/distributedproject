@@ -54,8 +54,8 @@ public class Users {
 	// mapping: one to one //instead of manual join
 	@OneToOne(fetch=FetchType.EAGER)//, cascade={CascadeType.DETACH}) //, cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	@JoinColumn(name = "USERNAME") // field of table: SubmittedForm_Plir
-	private SubmittedForm_Plir submittedForm_Plir; //SubmittedForm_Plir submittedForm_Plir;         //List<SubmittedForm_Plir> submittedForm_Plir;
-
+	private SubmittedForm_Plir submittedForm_Plir; //SubmittedForm_Plir submittedForm_Plir;         //List<SubmittedForm_Plir> submittedForm_Plir;	
+	
 
 	public Users() { // public empty default constructor
 

@@ -13,8 +13,7 @@ import javax.persistence.Table;
 public class SubmittedForm_Plir {
 	
 	@Id
-//	@OneToOne(cascade=CascadeType.ALL)                                       //annotation for foreign key  in users.java
-//	@JoinColumn(name = "USERNAME")
+	@Column(name = "USERNAME")
 	private String username;
 	
 	@Column(name = "FNAME")

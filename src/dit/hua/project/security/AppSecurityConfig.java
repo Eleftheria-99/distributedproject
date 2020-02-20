@@ -15,14 +15,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this class configures spring security
-	private static String REALM="MY_TEST_REALM";
 	
 	@Autowired
 	DataSource dataSource;
@@ -33,8 +30,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 
 			auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder())
 					// spring will find bean type of datasource, declared in the web xml
-					.usersByUsernameQuery("select username, password, enabled from USERS where username=?")
-					.authoritiesByUsernameQuery("select username, authority from AUTHORITIES where username=?");
+			.usersByUsernameQuery("select username, password, enabled from USERS where username=?")
+			.authoritiesByUsernameQuery("select username, authority from AUTHORITIES where username=?");
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
@@ -48,14 +45,12 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
         protected void configure(HttpSecurity http) {
 			try {
 				 http		
-				//.headers().disable()
-			   // .csrf().disable()
-			        .authorizeRequests()
-			        .antMatchers("/").permitAll()  
+			       // .csrf().disable()
+			       .authorizeRequests()
+ 		        .antMatchers("/").permitAll()  
 			        .antMatchers("/api/login").permitAll()  
-			        .antMatchers("/api/login/**")
-					 //.antMatchers("/DSExternal/**")
-			        .hasRole("student")
+			        .antMatchers("/api/login/**")   //.authorizeRequests()
+                    .authenticated()
 		        .and()
 					.formLogin().loginPage("/api/login")   //declare the log in page 
 					.loginProcessingUrl("/api/login/main-menu-for-all")
@@ -63,14 +58,17 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 					.permitAll()
 			    .and()
 					.logout()
-					.permitAll();	       
-		       // .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
-		        //.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);// always create session //stateless if We don't need sessions to be created.
+					.logoutSuccessUrl("/just-logged-out")
+					.permitAll(); 
+//                    .and()
+//                    .httpBasic()
+                    ;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		}
+	}
+		
 	}
 	
 	
@@ -85,12 +83,10 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 
 		// to allow resources (css,js,images,...) to be προσπελάσιμα for all we need to
 		// override the method configure(WebSecurity web) from
-		// WebSecurityConfigurerAdapter
 		@Override
 		public void configure(WebSecurity web) {
 			try {
 				web.ignoring().antMatchers("/resources/*");
-				web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");   /* To allow Pre-flight [OPTIONS] request from browser */
 				web.ignoring().antMatchers("/api/**");
 			} catch (Exception e) {
 				e.getStackTrace();
@@ -108,16 +104,16 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 				.antMatchers("/login/main-menu-for-all/*").hasRole("student")
 				.antMatchers("/login/main-menu-for-all/*").hasRole("employee")
 		    	.antMatchers("/login/main-menu-for-all/*").hasRole("supervisor")
-			//	.antMatchers("/login/**").hasRole("administrator")
+			    .antMatchers("/login/**").hasRole("administrator")
 				.and()
 					.formLogin().loginPage("/login")   //declare the log in page 
 					.loginProcessingUrl("/login/main-menu-for-all")
 					.defaultSuccessUrl("/login/main-menu-for-all")
+					.failureUrl("/login/error")
 					.permitAll()
 				 .and()
 					.logout()
 					//.logoutSuccessUrl("/just-logged-out")
-					//.logoutSuccessUrl("/login")
 		            .permitAll()
 		            .and()
 		            .exceptionHandling().accessDeniedPage("/403");
@@ -132,8 +128,19 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter { // this cl
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
-		System.out.println(encoder.toString());
 		return encoder;
 
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

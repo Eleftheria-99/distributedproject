@@ -40,7 +40,7 @@ public class HomePage_LogIn_MainMenuForAll_LogOut_Controller {
 	}
 
 	
-	@RequestMapping(value = "/login/main-menu-for-all", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/main-menu-for-all", method = RequestMethod.POST)
 	public String showMainMenuForAll(HttpServletRequest request, Model model, HttpSession session,Authentication auth) {
 		System.out.println("ready to show: main menu for all users page");
 		

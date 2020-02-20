@@ -1,6 +1,5 @@
 package dit.hua.project.entities;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,20 +9,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "SUBMFORM_GEO")
-public class SubmittedForm_Geo implements Serializable {
-
-//	
-//	@Column(name = "ID")
-//	@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     ++CHANGE CONSTRUCTOR !!, WITHOUT id field
-//    private int id;
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class SubmittedForm_Geo  {
 
 	@Id
-//	@OneToOne(cascade=CascadeType.ALL)                                       //annotation for foreign key  in users.java
 	@Column(name = "USERNAME")
 	private String username;
 	

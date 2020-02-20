@@ -16,7 +16,6 @@ public class Authorities {
 	@Column(name = "ID")
 	private int id;
 	
-	
     //annotation for foreign key  in users.java
 	@Column(name = "USERNAME")
 	private String username;

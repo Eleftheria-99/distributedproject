@@ -8,15 +8,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "SUBMFORM_OIK")
 public class SubmittedForm_Oik {
-
-
-//	@Column(name = "ID")
-//	@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement 
-//	private int id;
-	
 	
 	@Id
-//	@OneToOne(cascade=CascadeType.ALL)                                       //annotation for foreign key  in users.java
 	@Column(name = "USERNAME")
 	private String username;
 	

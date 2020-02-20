@@ -12,7 +12,6 @@ public class SubmittedForm_Diat {
 
 	
 	@Id
-//	@OneToOne(cascade=CascadeType.ALL)                                       //annotation for foreign key  in users.java
 	@Column(name = "USERNAME")
 	private String username;
 	

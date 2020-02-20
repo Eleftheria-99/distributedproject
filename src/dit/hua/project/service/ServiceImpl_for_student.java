@@ -327,9 +327,8 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 	public Final_Ranking_Oik student_service_SeeResults(Model model, HttpSession session) {
 
 		username = (String) session.getAttribute("username");
-		String dep = "Informatics" ; //(String) session.getAttribute("department");
+		String dep = (String) session.getAttribute("department");
 		Final_Ranking_Oik rank = new Final_Ranking_Oik();
-		// json = gson.toJson(form);
 
 		if (dep.equals("Economics")) {
 
@@ -370,10 +369,10 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 	@Transactional // because it has to do with the database
 	private Final_Ranking_Oik seeResults_Oik(Model model, String username, String dep) {
 
-		fname = studentDAO.returnFname_geo(username);
-		lname = studentDAO.returnLname_geo(username);
+//		fname = studentDAO.returnFname_geo(username);
+//		lname = studentDAO.returnLname_geo(username);
 
-		System.out.println("This is the first name " + fname + " and last name " + lname);
+		//System.out.println("This is the first name " + fname + " and last name " + lname);
 
 		ArrayList<Final_Ranking_Oik> arraylist_all_final_ranking_forms = studentDAO
 				.returnFinalRanking_oik_ALL_students_entitled();
@@ -381,12 +380,13 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 		for (Final_Ranking_Oik users : arraylist_all_final_ranking_forms) {
 			System.out.println("INSIDE FOR");
 			// System.out.println(users);
-			String retrieved_fname = users.getFname();
-			String retrieved_lname = users.getLname();
-			System.out.println("This is the retrieved from database first name " + retrieved_fname + " and last name "
-					+ retrieved_lname);
+//			String retrieved_fname = users.getFname();
+//			String retrieved_lname = users.getLname();
+//			System.out.println("This is the retrieved from database first name " + retrieved_fname + " and last name "
+//					+ retrieved_lname);
 
-			if (retrieved_fname.equals(fname) && retrieved_lname.equals(lname)) {
+		//	if (retrieved_fname.equals(fname) && retrieved_lname.equals(lname)) {
+			if (users.getUsername().equals(username)) {
 				System.out.println("INSIDE IF");
 				model.addAttribute("Points", "Point : ");
 				model.addAttribute("Rank", "Rank : ");
@@ -414,8 +414,8 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 	@Transactional // because it has to do with the database
 	private Final_Ranking_Plir seeResults_Plir(Model model, String username, String dep) {
 
-		fname = studentDAO.returnFname_geo(username);
-		lname = studentDAO.returnLname_geo(username);
+//		fname = studentDAO.returnFname_geo(username);
+//		lname = studentDAO.returnLname_geo(username);
 
 		System.out.println("This is the first name " + fname + " and last name " + lname);
 
@@ -430,7 +430,7 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 			System.out.println("This is the retrived from database first name " + retrieved_fname + " and last name "
 					+ retrieved_lname);
 
-			if (retrieved_fname.equals(fname) && retrieved_lname.equals(lname)) {
+			if (users.getUsername().equals(username)) {
 				System.out.println("INSIDE IF");
 				model.addAttribute("Points", "Point : ");
 				model.addAttribute("Rank", "Rank : ");
@@ -457,8 +457,8 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 	@Transactional // because it has to do with the database
 	private Final_Ranking_Geo seeResults_Geo(Model model, String username, String dep) {
 
-		fname = studentDAO.returnFname_geo(username);
-		lname = studentDAO.returnLname_geo(username);
+//		fname = studentDAO.returnFname_geo(username);
+//		lname = studentDAO.returnLname_geo(username);
 
 		System.out.println("This is the first name " + fname + " and last name " + lname);
 
@@ -473,7 +473,7 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 			System.out.println("This is the retrived from database first name " + retrieved_fname + " and last name "
 					+ retrieved_lname);
 
-			if (retrieved_fname.equals(fname) && retrieved_lname.equals(lname)) {
+			if (users.getUsername().equals(username)) {
 				System.out.println("INSIDE IF");
 				model.addAttribute("Points", "Point : ");
 				model.addAttribute("Rank", "Rank : ");
@@ -499,8 +499,8 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 	@Transactional // because it has to do with the database
 	private Final_Ranking_Diat seeResults_Diat(Model model, String username, String dep) {
 
-		fname = studentDAO.returnFname_diat(username);
-		lname = studentDAO.returnLname_diat(username);
+//		fname = studentDAO.returnFname_diat(username);
+//		lname = studentDAO.returnLname_diat(username);
 
 		System.out.println("This is the first name " + fname + " and last name " + lname);
 
@@ -515,7 +515,7 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 			System.out.println("This is the retrived from database first name " + retrieved_fname + " and last name "
 					+ retrieved_lname);
 
-			if (retrieved_fname.equals(fname) && retrieved_lname.equals(lname)) {
+			if (users.getUsername().equals(username)) {
 				System.out.println("INSIDE IF");
 				model.addAttribute("Points", "Points : ");
 				model.addAttribute("Rank", "Rank : ");
@@ -560,11 +560,23 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 				form_plir = studentDAO.insert_form_plir(user, fname, lname, email, phoneNumber, place_of_residence,
 						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
 						annualIncome, unemployedParents);
-				System.out.println(form_plir.toString());
 			} else {
 				// show error
-				error = "You have already submitted your form!";
-				formOik.setDepartment(error);
+				form_plir = studentDAO.returnStudentForm_PlirREST(user);
+				
+				formOik.setUsername(form_plir.getUsername());
+				formOik.setFname(form_plir.getFname());
+				formOik.setLname(form_plir.getLname());
+				formOik.setEmail(form_plir.getEmail());
+				formOik.setDepartment("exists");
+				formOik.setPhoneNumber(form_plir.getPhoneNumber());
+				formOik.setPlaceOfResidence(form_plir.getPlaceOfResidence());
+				formOik.setPlaceOfStudying(form_plir.getPlaceOfStudying());
+				formOik.setYearOfAttendance(form_plir.getYearOfAttendance());
+				formOik.setFamilyStatus(form_plir.getFamilyStatus());
+				formOik.setAnnualIncome(form_plir.getAnnualIncome());
+				formOik.setSiblingsStudying(form_plir.getSiblingsStudying());
+				formOik.setUnemployedParents(form_plir.getUnemployedParents());
 			}
 
 			// GEOGRAPHY
@@ -574,12 +586,24 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 				form_geo = studentDAO.insert_form_geo(user, fname, lname, email, phoneNumber, place_of_residence,
 						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
 						annualIncome, unemployedParents);
-				System.out.println(form_geo.toString());
 
 			} else {
 				// show error
-				error = "You have already submitted your form!";
-				formOik.setDepartment(error);
+				form_geo = studentDAO.returnStudentForm_GeoREST(user);
+				
+				formOik.setUsername(form_geo.getUsername());
+				formOik.setFname(form_geo.getFname());
+				formOik.setLname(form_geo.getLname());
+				formOik.setEmail(form_geo.getEmail());
+				formOik.setDepartment("exists");
+				formOik.setPhoneNumber(form_geo.getPhoneNumber());
+				formOik.setPlaceOfResidence(form_geo.getPlaceOfResidence());
+				formOik.setPlaceOfStudying(form_geo.getPlaceOfStudying());
+				formOik.setYearOfAttendance(form_geo.getYearOfAttendance());
+				formOik.setFamilyStatus(form_geo.getFamilyStatus());
+				formOik.setAnnualIncome(form_geo.getAnnualIncome());
+				formOik.setSiblingsStudying(form_geo.getSiblingsStudying());
+				formOik.setUnemployedParents(form_geo.getUnemployedParents());
 			}
 			// NUTRITION
 		} else if (department.equals("Nutrition")) {
@@ -587,28 +611,157 @@ public class ServiceImpl_for_student implements ServiceInterface_for_student {
 				form_diat = studentDAO.insert_form_diat(user, fname, lname, email, phoneNumber, place_of_residence,
 						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
 						annualIncome, unemployedParents);
-				System.out.println(form_diat.toString());
 			} else {
 				// show error
-				error = "You have already submitted your form!";
-				formOik.setDepartment(error);
+				form_diat = studentDAO.returnStudentForm_DiatREST(user);
+				
+				formOik.setUsername(form_diat.getUsername());
+				formOik.setFname(form_diat.getFname());
+				formOik.setLname(form_diat.getLname());
+				formOik.setEmail(form_diat.getEmail());
+				formOik.setDepartment("exists");
+				formOik.setPhoneNumber(form_diat.getPhoneNumber());
+				formOik.setPlaceOfResidence(form_diat.getPlaceOfResidence());
+				formOik.setPlaceOfStudying(form_diat.getPlaceOfStudying());
+				formOik.setYearOfAttendance(form_diat.getYearOfAttendance());
+				formOik.setFamilyStatus(form_diat.getFamilyStatus());
+				formOik.setAnnualIncome(form_diat.getAnnualIncome());
+				formOik.setSiblingsStudying(form_diat.getSiblingsStudying());
+				formOik.setUnemployedParents(form_diat.getUnemployedParents());
+				
+				
 			}
 			// ECONOMICS
 		} else if (department.equals("Economics")) {
 			if (studentDAO.if_form_NOT_exists_Oik(user)) {
-				form_oik = studentDAO.insert_form_oik(user, fname, lname, email, phoneNumber, place_of_residence,
+				formOik = studentDAO.insert_form_oik(user, fname, lname, email, phoneNumber, place_of_residence,
 						placeOfStudying, department, int_year_of_attendance, familyStatus, siblingsStudying,
 						annualIncome, unemployedParents);
-				System.out.println(form_oik.toString());
 			} else {
 				// show error
-				error = "You have already submitted your form!";
-				formOik.setDepartment(error);
+				formOik = studentDAO.returnStudentForm_OikREST(user);
+				formOik.setDepartment("exists");
 			}
 		}
 		System.out.println("form was just submitted - student service");
 
-		// formOik =(SubmittedForm_Dat) form_diat;
 		return formOik;
+	}
+
+	@Override
+	@Transactional
+	public String student_service_externalChangedForm(SubmittedForm_Oik form) {
+
+		department = form.getDepartment();
+		String user = form.getUsername();
+		email = form.getEmail();
+		phoneNumber = form.getPhoneNumber();
+		place_of_residence = form.getPlaceOfResidence();
+		
+		String jsonForm = null;
+
+		System.out.println(
+				"department,user,email,phone,place:  " + department + user + email + phoneNumber + place_of_residence);
+
+		// String jsonForm = null;
+		// INFORMATICS
+		if (department.equals("Informatics")) {
+			if (studentDAO.if_form_NOT_exists_Plir(user)) {
+				// student has not submitted a form yet
+				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
+				 return notfound;
+			} else {
+				// student has submitted a form
+				SubmittedForm_Plir formplir = new SubmittedForm_Plir();
+				formplir = studentDAO.change_form_plir(user, email, phoneNumber, place_of_residence);
+
+				jsonForm = "{\"username\": \"" + formplir.getUsername() + "\"," + "\"Fname\": \"" + formplir.getFname()
+				+ "\"," + "\"Lname\": \"" + formplir.getLname() + "\"," + "\"Email\": \"" + formplir.getEmail()
+				+ "\"," + "\"PhoneNumber\": " + formplir.getPhoneNumber() + "," + "\"PlaceOfResidence\": \""
+				+ formplir.getPlaceOfResidence() + "\"," + "\"PlaceOfStudying\": \""
+				+ formplir.getPlaceOfStudying() + "\"," + "\"Department\": \"" + formplir.getDepartment()
+				+ "\"," + "\"YearOfAttendance\": " + formplir.getYearOfAttendance() + ","
+				+ "\"FamilyStatus\": \"" + formplir.getFamilyStatus() + "\"," + "\"SiblingsStudying\": "
+				+ formplir.getSiblingsStudying() + "," + "\"AnnualIncome\": \"" + formplir.getAnnualIncome()
+				+ "\"," + "\"UnemployedParents\": " + formplir.getUnemployedParents() 
+
+				+ "}";
+				
+			}
+
+			// GEOGRAPHY
+		} else if (department.equals("Geography")) {
+			if (studentDAO.if_form_NOT_exists_Geo(user)) {
+				// student has not submitted a form yet
+				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
+				 return notfound;
+			} else {
+				// student has submitted a form
+				SubmittedForm_Geo formgeo = new SubmittedForm_Geo();
+				formgeo = studentDAO.change_form_geo(user, email, phoneNumber, place_of_residence);
+
+				jsonForm = "{\"username\": \"" + formgeo.getUsername() + "\"," + "\"Fname\": \"" + formgeo.getFname()
+				+ "\"," + "\"Lname\": \"" + formgeo.getLname() + "\"," + "\"Email\": \"" + formgeo.getEmail()
+				+ "\"," + "\"PhoneNumber\": " + formgeo.getPhoneNumber() + "," + "\"PlaceOfResidence\": \""
+				+ formgeo.getPlaceOfResidence() + "\"," + "\"PlaceOfStudying\": \""
+				+ formgeo.getPlaceOfStudying() + "\"," + "\"Department\": \"" + formgeo.getDepartment() + "\","
+				+ "\"YearOfAttendance\": " + formgeo.getYearOfAttendance() + "," + "\"FamilyStatus\": \""
+				+ formgeo.getFamilyStatus() + "\"," + "\"SiblingsStudying\": " + formgeo.getSiblingsStudying()
+				+ "," + "\"AnnualIncome\": \"" + formgeo.getAnnualIncome() + "\"," + "\"UnemployedParents\": "
+				+ formgeo.getUnemployedParents() 
+
+				+ "}";
+				
+			}
+			// NUTRITION
+		} else if (department.equals("Nutrition")) {
+			if (studentDAO.if_form_NOT_exists_Diat(user)) {
+
+				// student has not submitted a form yet
+				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
+				 return notfound;
+			} else {
+				// student has submitted a form
+				SubmittedForm_Diat formdiat = new SubmittedForm_Diat();
+				formdiat = studentDAO.change_form_diat(user, email, phoneNumber, place_of_residence);
+				
+				jsonForm = "{\"username\": \"" + formdiat.getUsername() + "\"," + "\"Fname\": \"" + formdiat.getFname()
+				+ "\"," + "\"Lname\": \"" + formdiat.getLname() + "\"," + "\"Email\": \"" + formdiat.getEmail()
+				+ "\"," + "\"PhoneNumber\": " + formdiat.getPhoneNumber() + "," + "\"PlaceOfResidence\": \""
+				+ formdiat.getPlaceOfResidence() + "\"," + "\"PlaceOfStudying\": \""
+				+ formdiat.getPlaceOfStudying() + "\"," + "\"Department\": \"" + formdiat.getDepartment()
+				+ "\"," + "\"YearOfAttendance\": " + formdiat.getYearOfAttendance() + ","
+				+ "\"FamilyStatus\": \"" + formdiat.getFamilyStatus() + "\"," + "\"SiblingsStudying\": "
+				+ formdiat.getSiblingsStudying() + "," + "\"AnnualIncome\": \"" + formdiat.getAnnualIncome()
+				+ "\"," + "\"UnemployedParents\": " + formdiat.getUnemployedParents() 
+
+				+ "}";
+				
+			}
+			// ECONOMICS
+		} else if (department.equals("Economics")) {
+			if (studentDAO.if_form_NOT_exists_Oik(user)) {
+				// student has not submitted a form yet
+				String notfound = "Sorry, you haven't submitted your form yet!"; // MAKE IT JSON
+				// return notfound;
+			} else {
+				// student has submitted a form
+
+				form = studentDAO.change_form_oik(user, email, phoneNumber, place_of_residence);
+				
+				jsonForm = "{\"username\": \"" + form.getUsername() + "\"," + "\"Fname\": \"" + form.getFname() + "\","
+						+ "\"Lname\": \"" + form.getLname() + "\"," + "\"Email\": \"" + form.getEmail() + "\","
+						+ "\"PhoneNumber\": " + form.getPhoneNumber() + "," + "\"PlaceOfResidence\": \""
+						+ form.getPlaceOfResidence() + "\"," + "\"PlaceOfStudying\": \"" + form.getPlaceOfStudying()
+						+ "\"," + "\"Department\": \"" + form.getDepartment() + "\"," + "\"YearOfAttendance\": "
+						+ form.getYearOfAttendance() + "," + "\"FamilyStatus\": \"" + form.getFamilyStatus() + "\","
+						+ "\"SiblingsStudying\": " + form.getSiblingsStudying() + "," + "\"AnnualIncome\": \""
+						+ form.getAnnualIncome() + "\"," + "\"UnemployedParents\": " + form.getUnemployedParents() 
+
+						+ "}";
+			}
+
+		}
+		return jsonForm;
 	}
 }

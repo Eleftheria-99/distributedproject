@@ -41,27 +41,27 @@ public class EmployeeShowTheSubmittedFormsController {
 	}
 
 	//DECLINE
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/decline", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/decline", method = RequestMethod.GET)
 	public String declineASubmittedFormDiat(HttpServletRequest request) {
 		service.declineASubmittedFormDiat(request);
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat";
 
 	}
 
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/decline", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/decline", method = RequestMethod.GET)
 	public String declineASubmittedFormGeo(HttpServletRequest request) {
 		service.declineASubmittedFormGeo(request);
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo";
 }
 
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/decline", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/decline", method = RequestMethod.GET)
 	public String declineASubmittedFormOik(HttpServletRequest request) {
 		service.declineASubmittedFormOik(request);
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik";
 
 	}
 	
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/decline" , method = RequestMethod.POST) 
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/decline" , method = RequestMethod.GET) 
 	public String declineASubmittedForm(HttpServletRequest request) {
 		service.declineASubmittedFormPlir(request);	
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir";
@@ -69,21 +69,21 @@ public class EmployeeShowTheSubmittedFormsController {
 	}
 
 	//ACCEPT
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/accept", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat/accept", method = RequestMethod.GET)
 	public String AcceptASubmittedFormDiat(HttpServletRequest request) {
 		service.acceptASubmittedFormDiat(request);
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-diat";
 
 	}
 
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/accept", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo/accept", method = RequestMethod.GET)
 	public String AcceptASubmittedFormGeo(HttpServletRequest request) {
 		service.acceptASubmittedFormGeo(request);
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-geo";
 
 	}
 	
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/accept", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik/accept", method = RequestMethod.GET)
 	public String AcceptASubmittedFormOik(HttpServletRequest request) {
 		service.acceptASubmittedFormOik(request);
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-oik";
@@ -91,7 +91,7 @@ public class EmployeeShowTheSubmittedFormsController {
 	}
 
 
-	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/accept", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir/accept", method = RequestMethod.GET)
 	public String AcceptASubmittedFormPlir(HttpServletRequest request) {
 		service.acceptASubmittedFormPlir(request);
 		return "redirect:/login/main-menu-for-all/employee-menu/employee-show-the-submitted-forms-dep-plir";

@@ -15,20 +15,22 @@ public class Final_Ranking_Geo implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-
 	@Id                       //primary key 
 	@Column(name = "ID")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
-	protected int id;
+	private int id;
+	
+	@Column(name = "USERNAME")
+	private String username;
 	
 	@Column(name = "FNAME")
-	protected String fname;
+	private String fname;
 	
 	@Column(name = "LNAME")
-	protected String lname;
+	private String lname;
 
 	@Column(name = "POINTS")
-	protected int points;
+	private int points;
 	
 	
 	public Final_Ranking_Geo() {
@@ -46,6 +48,23 @@ public class Final_Ranking_Geo implements Serializable{
 
 	public Final_Ranking_Geo(String fname, String lname, int points) {
 		super();
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
+	}
+	
+	
+	public Final_Ranking_Geo(String username, String fname, String lname, int points) {
+		super();
+		this.username = username;
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
+	}
+	public Final_Ranking_Geo(int id, String username, String fname, String lname, int points) {
+		super();
+		this.id = id;
+		this.username = username;
 		this.fname = fname;
 		this.lname = lname;
 		this.points = points;
@@ -85,6 +104,12 @@ public class Final_Ranking_Geo implements Serializable{
 
 	public void setPoints(int points) {
 		this.points = points;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

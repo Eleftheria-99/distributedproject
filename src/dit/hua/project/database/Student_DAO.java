@@ -44,23 +44,22 @@ public interface Student_DAO {
 
 	// check if student hasn't submitted his form yet
 	public boolean if_form_NOT_exists_Oik(String username);
-
 	public boolean if_form_NOT_exists_Plir(String username);
-
 	public boolean if_form_NOT_exists_Diat(String username);
-
 	public boolean if_form_NOT_exists_Geo(String username);
 
 	// return student's form
 	public void returnStudentForm_Oik(String username, Model model, String error);
 	public SubmittedForm_Oik returnStudentForm_OikREST(String user);
 
-
 	public void returnStudentForm_Plir(String username, Model model, String error);
+	public SubmittedForm_Plir returnStudentForm_PlirREST(String user);
 
 	public void returnStudentForm_Diat(String username, Model model, String error);
+	public SubmittedForm_Diat returnStudentForm_DiatREST(String user);
 
 	public void returnStudentForm_Geo(String username, Model model, String error);
+	public SubmittedForm_Geo returnStudentForm_GeoREST(String user);
 
 	// find which department the logged-in student is studying
 	public String findwhichDepartment(String username);

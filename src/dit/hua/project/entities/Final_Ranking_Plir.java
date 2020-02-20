@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "FINALRANKING_DIAT")
+@Table(name = "FINALRANKING_PLIR")
 public class Final_Ranking_Plir implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -16,21 +16,23 @@ public class Final_Ranking_Plir implements Serializable{
 	@Id                       //primary key 
 	@Column(name = "ID")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)   //autoincrement     
-	protected int id;
+	private int id;
+	
+	@Column(name = "USERNAME")
+	private String username;
 	
 	@Column(name = "FNAME")
-	protected String fname;
+	private String fname;
 	
 	@Column(name = "LNAME")
-	protected String lname;
+	private String lname;
 
 	@Column(name = "POINTS")
-	protected int points;
+	private int points;
 	
 	
 	public Final_Ranking_Plir() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Final_Ranking_Plir(int id, String fname, String lname, int points) {
 		super();
@@ -47,11 +49,32 @@ public class Final_Ranking_Plir implements Serializable{
 		this.points = points;
 	}
 
+	public Final_Ranking_Plir(String username, String fname, String lname, int points) {
+		super();
+		this.username = username;
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
+	}
+	public Final_Ranking_Plir(int id, String username, String fname, String lname, int points) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.fname = fname;
+		this.lname = lname;
+		this.points = points;
+	}
 	@Override
 	public String toString() {
 		return "Final_Ranking_Plir [id=" + id + ", fname=" + fname + ", lname=" + lname + ", points=" + points + "]";
 	}
 
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public int getId() {
 		return id;
 	}
